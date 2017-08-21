@@ -27,11 +27,13 @@ import aQute.bnd.annotation.ProviderType;
  */
 @ProviderType
 public class MigrationManagerImpl extends MigrationManagerBaseImpl {
-	/*
+
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. All methods that expect a migration manager model instance should use the {@link com.liferay.data.migration.tool.model.MigrationManager} interface instead.
 	 */
 	public MigrationManagerImpl() {
 	}
+
 }

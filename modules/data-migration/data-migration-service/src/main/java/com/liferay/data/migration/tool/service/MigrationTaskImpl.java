@@ -1,5 +1,9 @@
 package com.liferay.data.migration.tool.service;
 
+import static com.liferay.data.migration.tool.service.MigrationConstants.MAX_BATCH_QUEUE_SIZE;
+import static com.liferay.data.migration.tool.service.MigrationConstants.SYNC_REC_COUNT;
+import static com.liferay.data.migration.tool.service.MigrationConstants.THREAD_POOL_SIZE;
+
 import com.liferay.data.migration.tool.MigrationEntity;
 import com.liferay.data.migration.tool.MigrationEntityService;
 import com.liferay.data.migration.tool.MigrationTask;
@@ -13,14 +17,10 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.liferay.data.migration.tool.service.MigrationConstants.MAX_BATCH_QUEUE_SIZE;
-import static com.liferay.data.migration.tool.service.MigrationConstants.SYNC_REC_COUNT;
-import static com.liferay.data.migration.tool.service.MigrationConstants.THREAD_POOL_SIZE;
-
 /**
  * @author Dylan Rebelak
  */
-public class MigrationTaskImpl implements MigrationTask{
+public class MigrationTaskImpl implements MigrationTask {
 
 	public MigrationTaskImpl(MigrationEntityService entityService) {
 		this(
@@ -32,9 +32,9 @@ public class MigrationTaskImpl implements MigrationTask{
 		MigrationEntityService entityService, int batchSize, int threadPoolSize,
 		int maxQueue) {
 
+		_entityService = entityService;
 		_batchSize = batchSize;
 		_count = new AtomicLong();
-		_entityService = entityService;
 
 		BlockingQueue<Runnable> jobQueue = new LinkedBlockingQueue<>(maxQueue);
 
@@ -77,7 +77,7 @@ public class MigrationTaskImpl implements MigrationTask{
 				break;
 			}
 
-			_threadPoolExecutor.execute(createSyncJob(batch));
+			_threadPoolExecutor.execute(_createSyncJob(batch));
 		}
 
 		_threadPoolExecutor.shutdown();
@@ -86,10 +86,12 @@ public class MigrationTaskImpl implements MigrationTask{
 	public void setMigrationManagerLocalService(
 		MigrationManagerLocalService migrationManagerLocalService) {
 
-		 _migrationManagerLocalService = migrationManagerLocalService;
+		_migrationManagerLocalService = migrationManagerLocalService;
 	}
 
-	protected MigrationEntityBatchExecutor createSyncJob(List<MigrationEntity> batch) {
+	private MigrationEntityBatchExecutor _createSyncJob(
+		List<MigrationEntity> batch) {
+
 		MigrationEntityBatchExecutor batchSyncExecutor =
 			new MigrationEntityBatchExecutor(_entityService, batch, _count);
 
@@ -106,4 +108,5 @@ public class MigrationTaskImpl implements MigrationTask{
 	private MigrationEntityService _entityService;
 	private MigrationManagerLocalService _migrationManagerLocalService;
 	private ThreadPoolExecutor _threadPoolExecutor;
+
 }

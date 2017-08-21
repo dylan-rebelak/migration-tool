@@ -20,7 +20,6 @@ import com.liferay.data.migration.tool.MigrationEntity;
 import com.liferay.data.migration.tool.MigrationEntityService;
 import com.liferay.data.migration.tool.MigrationTask;
 import com.liferay.data.migration.tool.model.MigrationManager;
-import com.liferay.data.migration.tool.service.MigrationConstants;
 import com.liferay.data.migration.tool.service.MigrationTaskImpl;
 import com.liferay.data.migration.tool.service.base.MigrationManagerLocalServiceBaseImpl;
 import com.liferay.portal.kernel.log.Log;
@@ -28,13 +27,12 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.StringBundler;
-import org.apache.commons.lang.time.StopWatch;
 
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.liferay.data.migration.tool.service.MigrationConstants.MIGRATION_DATE_ATTRIBUTE;
+import org.apache.commons.lang.time.StopWatch;
 
 /**
  * The implementation of the migration manager local service.
@@ -53,34 +51,93 @@ import static com.liferay.data.migration.tool.service.MigrationConstants.MIGRATI
 @ProviderType
 public class MigrationManagerLocalServiceImpl
 	extends MigrationManagerLocalServiceBaseImpl {
-	/*
+
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public long migrateEntityBatch(
+		MigrationEntityService entityService, List<MigrationEntity> batch) {
+
+		long count = 0;
+
+		for (MigrationEntity entity : batch) {
+			try {
+				entityService.syncEntity(entity);
+
+				count++;
+			}
+			catch (Exception e) {
+				StringBundler msg = new StringBundler(4);
+
+				msg.append(">>> Could not sync ");
+				msg.append(entity.getEntityName());
+				msg.append(": ");
+				msg.append(entity.getPrimKey());
+
+				_log.error(msg.toString(), e);
+			}
+		}
+
+		return count;
+	}
+
+	public void recordMigrationStatistics(
+		Date fromDate, Date timeStarted, long count) {
+
+		long syncId = counterLocalService.increment(
+			MigrationManager.class.getName());
+
+		MigrationManager manager = migrationManagerPersistence.create(syncId);
+
+		/*_groupExpandoBridge.setAttribute(
+			MIGRATION_DATE_ATTRIBUTE, timeStarted, false);*/
+
+		manager.setTimeCompleted(new Date());
+		manager.setFromDate(fromDate);
+		manager.setRecordsSynced(count);
+		manager.setTimeStarted(timeStarted);
+
+		addMigrationManager(manager);
+	}
+
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. Always use {@link com.liferay.data.migration.tool.service.MigrationManagerLocalServiceUtil} to access the migration manager local service.
 	 */
 
-
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public AtomicLong runEntityService(
-		MigrationEntityService entityService, Date startDate, AtomicLong count) {
+		MigrationEntityService entityService, Date startDate,
+		AtomicLong count) {
 
 		String entityName = entityService.getEntityName();
 
 		try {
-			Date fromDate = (Date)_groupExpandoBridge.getAttribute(
+			/*Date fromDate = (Date)_groupExpandoBridge.getAttribute(
 				MigrationConstants.getSyncDateAttributeName(entityName), false);
 
+			Date fromDate = new Date();
 			count.addAndGet(doRunEntityService(entityService, fromDate));
 
 			_groupExpandoBridge.setAttribute(
-				MigrationConstants.getSyncDateAttributeName(entityName), startDate,
-				false);
+				MigrationConstants.getSyncDateAttributeName(entityName),
+				startDate,
+				false);*/
 		}
 		catch (Exception e) {
 			_log.error(">>> Failed to sync " + entityName, e);
 		}
 
 		return count;
+	}
+
+	protected MigrationTask createEntitySync(
+		MigrationEntityService entityService) {
+
+		MigrationTaskImpl task = new MigrationTaskImpl(entityService);
+
+		task.setMigrationManagerLocalService(migrationManagerLocalService);
+
+		return task;
 	}
 
 	protected long doRunEntityService(
@@ -128,61 +185,7 @@ public class MigrationManagerLocalServiceImpl
 		return count;
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public long migrateEntityBatch(
-		MigrationEntityService entityService, List<MigrationEntity> batch) {
+	private static final Log _log = LogFactoryUtil.getLog(
+		MigrationManagerLocalServiceImpl.class);
 
-		long count = 0;
-
-		for (MigrationEntity entity : batch) {
-			try {
-				entityService.syncEntity(entity);
-
-				count++;
-			}
-			catch (Exception e) {
-				StringBundler msg = new StringBundler(4);
-
-				msg.append(">>> Could not sync ");
-				msg.append(entity.getEntityName());
-				msg.append(": ");
-				msg.append(entity.getPrimKey());
-
-				_log.error(msg.toString(), e);
-			}
-		}
-
-		return count;
-	}
-
-	protected MigrationTask createEntitySync(
-		MigrationEntityService entityService) {
-
-		MigrationTaskImpl task = new MigrationTaskImpl(entityService);
-
-		task.setMigrationManagerLocalService(migrationManagerLocalService);
-
-		return task;
-	}
-
-	public void recordMigrationStatistics(
-		Date fromDate, Date timeStarted, long count) {
-
-		long syncId = counterLocalService.increment(
-			MigrationManager.class.getName());
-
-		MigrationManager manager = migrationManagerPersistence.create(syncId);
-
-		_groupExpandoBridge.setAttribute(MIGRATION_DATE_ATTRIBUTE, timeStarted, false);
-
-		manager.setTimeCompleted(new Date());
-		manager.setFromDate(fromDate);
-		manager.setRecordsSynced(count);
-		manager.setTimeStarted(timeStarted);
-
-		addMigrationManager(manager);
-	}
-
-	private static final Log _log =
-		LogFactoryUtil.getLog(MigrationManagerLocalServiceImpl.class);
 }

@@ -16,22 +16,23 @@ import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
 import com.liferay.portal.kernel.scheduler.TriggerFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+
+import java.util.Date;
+import java.util.Map;
+
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
-import java.util.Date;
-import java.util.Map;
-
 /**
  * @author Dylan Rebelak
  */
-@Component(
-	immediate = true, service = MigrationScheduledListener.class
-)
-public class MigrationScheduledListener extends BaseSchedulerEntryMessageListener {
+@Component(immediate = true, service = MigrationScheduledListener.class)
+public class MigrationScheduledListener
+	extends BaseSchedulerEntryMessageListener {
+
 	@Activate
 	@Modified
 	protected void activate(Map<String, Object> properties)
@@ -82,7 +83,9 @@ public class MigrationScheduledListener extends BaseSchedulerEntryMessageListene
 		Lock lock = null;
 
 		String className = MigrationScheduledListener.class.toString();
+
 		className = className.substring(className.indexOf("com"));
+
 		String user = "Scheduled Task";
 
 		if (_lockManager.isLocked(className, className)) {
@@ -135,4 +138,5 @@ public class MigrationScheduledListener extends BaseSchedulerEntryMessageListene
 
 	@Reference
 	private SchedulerEngineHelper _schedulerEngineHelper;
+
 }

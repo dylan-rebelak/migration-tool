@@ -5,15 +5,17 @@ import com.liferay.data.migration.tool.MigrationEntityService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringBundler;
-import org.apache.commons.lang.time.StopWatch;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+
+import org.apache.commons.lang.time.StopWatch;
 
 /**
  * @author Dylan Rebelak
  */
 public class MigrationEntityBatchExecutor implements Runnable {
+
 	@Override
 	public void run() {
 		String entityName = _entityService.getEntityName();
@@ -43,15 +45,16 @@ public class MigrationEntityBatchExecutor implements Runnable {
 		_count.getAndAdd(count);
 	}
 
-	MigrationEntityBatchExecutor(
-		MigrationEntityService entityService, List<MigrationEntity> batch, AtomicLong count) {
+	protected MigrationEntityBatchExecutor(
+		MigrationEntityService entityService, List<MigrationEntity> batch,
+		AtomicLong count) {
 
-		_count = count;
 		_entityService = entityService;
 		_entityBatch = batch;
+		_count = count;
 	}
 
-	public void setMigrationManagerLocalService(
+	protected void setMigrationManagerLocalService(
 		MigrationManagerLocalService migrationManagerLocalService) {
 
 		_migrationManagerLocalService = migrationManagerLocalService;
@@ -63,6 +66,6 @@ public class MigrationEntityBatchExecutor implements Runnable {
 	private AtomicLong _count;
 	private List<MigrationEntity> _entityBatch;
 	private MigrationEntityService _entityService;
-
 	private MigrationManagerLocalService _migrationManagerLocalService;
+
 }

@@ -4,6 +4,7 @@ package com.liferay.data.migration.tool;
  * @author Dylan Rebelak
  */
 public interface MigrationEntity {
+
 	public default String getEntityName() {
 		Class<? extends MigrationEntity> entityClass = this.getClass();
 
@@ -15,4 +16,5 @@ public interface MigrationEntity {
 	public default String removePrefix(String entityName) {
 		return entityName.substring(3);
 	}
+
 }

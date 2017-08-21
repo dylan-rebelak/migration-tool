@@ -1,43 +1,39 @@
 package com.liferay.data.migration.tool.service;
 
 import com.liferay.data.migration.tool.MigrationEntityService;
+import com.liferay.data.migration.tool.MigrationHandler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.util.Portal;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-
-import com.liferay.data.migration.tool.MigrationHandler;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.liferay.data.migration.tool.service.MigrationConstants.MIGRATION_DATE_ATTRIBUTE;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  * @author Dylan Rebelak
  */
-@Component(
-	immediate = true, service = MigrationHandler.class
-)
+@Component(immediate = true, service = MigrationHandler.class)
 public class MigrationHandlerImpl implements MigrationHandler {
 
 	@Override
 	public void runMigration() {
 		Date timeStarted = new Date();
 
-		Group group = _groupLocalService.fetchGroup(
+		/* Group group = _groupLocalService.fetchGroup(
 			_portal.getDefaultCompanyId(), MAIN_SITE);
 
 		if (group == null) {
 			_log.error(
-				">>> Cannot run Data Migration: " + MAIN_SITE + " does not exist");
+				">>> Cannot run Data Migration: " +
+				MAIN_SITE + " does not exist");
 
 			return;
 		}
@@ -45,24 +41,36 @@ public class MigrationHandlerImpl implements MigrationHandler {
 		_groupExpandoBridge = group.getExpandoBridge();
 
 		Date fromDate = (Date)_groupExpandoBridge.getAttribute(
-			MIGRATION_DATE_ATTRIBUTE, false);
+			MIGRATION_DATE_ATTRIBUTE, false);*/
+		Date fromDate = new Date();
 
 		if (_log.isInfoEnabled()) {
 			_log.info(">>> Starting Data Migration...");
 		}
 
-		long entityCount = runEntityServices(timeStarted);
+		long entityCount = _runEntityServices(timeStarted);
 
 		if (_log.isInfoEnabled()) {
 			_log.info(">>> Data Migration finished.");
 		}
 
-		_migrationManagerLocalService.recordMigrationStatistics(fromDate, timeStarted, entityCount);
+		_migrationManagerLocalService.recordMigrationStatistics(
+			fromDate, timeStarted, entityCount);
 	}
 
+	protected void bind(MigrationEntityService entityService) {
+		if (_migrationEntityServices == null) {
+			_migrationEntityServices = new ArrayList<>();
+		}
 
+		_migrationEntityServices.add(entityService);
+	}
 
-	private long runEntityServices(final Date startDate) {
+	protected void unbind(MigrationEntityService entityService) {
+		_migrationEntityServices.remove(entityService);
+	}
+
+	private long _runEntityServices(final Date startDate) {
 		final AtomicLong count = new AtomicLong();
 
 		_migrationEntityServices.parallelStream().forEach(
@@ -73,15 +81,19 @@ public class MigrationHandlerImpl implements MigrationHandler {
 		return count.longValue();
 	}
 
-	@Reference(
-		cardinality= ReferenceCardinality.MULTIPLE, bind="bind",
-		unbind="unbind", service = MigrationEntityService.class,
-		policy = ReferencePolicy.DYNAMIC
-	)
-	private List<MigrationEntityService> _migrationEntityServices;
+	private static final Log _log = LogFactoryUtil.getLog(
+		MigrationHandlerImpl.class);
 
 	@Reference
 	private GroupLocalService _groupLocalService;
+
+	@Reference(
+		bind = "bind", cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC,
+		service = MigrationEntityService.class, unbind = "unbind"
+
+	)
+	private List<MigrationEntityService> _migrationEntityServices;
 
 	@Reference
 	private MigrationManagerLocalService _migrationManagerLocalService;
@@ -89,17 +101,4 @@ public class MigrationHandlerImpl implements MigrationHandler {
 	@Reference
 	private Portal _portal;
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		MigrationHandlerImpl.class);
-
-	protected void bind(MigrationEntityService entityService){
-		if(_migrationEntityServices == null){
-			_migrationEntityServices = new ArrayList<MigrationEntityService>();
-		}
-		_migrationEntityServices.add(entityService);
-	}
-
-	protected void unbind(MigrationEntityService entityService){
-		_migrationEntityServices.remove(entityService);
-	}
 }
