@@ -1,4 +1,4 @@
-package com.liferay.data.migration.tool;
+package com.liferay.data.migration.tool.service;
 
 /**
  * @author Dylan Rebelak

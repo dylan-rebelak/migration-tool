@@ -1,6 +1,6 @@
-package com.liferay.data.migration.tool.service;
+package com.liferay.data.migration.tool.internal;
 
-import com.liferay.data.migration.tool.MigrationHandler;
+import com.liferay.data.migration.tool.service.MigrationHandler;
 import com.liferay.portal.kernel.lock.Lock;
 import com.liferay.portal.kernel.lock.LockManager;
 import com.liferay.portal.kernel.log.Log;

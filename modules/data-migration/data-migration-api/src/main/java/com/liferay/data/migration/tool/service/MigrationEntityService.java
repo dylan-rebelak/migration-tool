@@ -1,4 +1,4 @@
-package com.liferay.data.migration.tool;
+package com.liferay.data.migration.tool.service;
 
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;

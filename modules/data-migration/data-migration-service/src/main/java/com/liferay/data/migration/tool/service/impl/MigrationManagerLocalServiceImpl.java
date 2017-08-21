@@ -16,11 +16,11 @@ package com.liferay.data.migration.tool.service.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.data.migration.tool.MigrationEntity;
-import com.liferay.data.migration.tool.MigrationEntityService;
-import com.liferay.data.migration.tool.MigrationTask;
+import com.liferay.data.migration.tool.internal.MigrationTaskImpl;
 import com.liferay.data.migration.tool.model.MigrationManager;
-import com.liferay.data.migration.tool.service.MigrationTaskImpl;
+import com.liferay.data.migration.tool.service.MigrationEntity;
+import com.liferay.data.migration.tool.service.MigrationEntityService;
+import com.liferay.data.migration.tool.service.MigrationTask;
 import com.liferay.data.migration.tool.service.base.MigrationManagerLocalServiceBaseImpl;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;

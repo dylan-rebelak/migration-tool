@@ -1,4 +1,4 @@
-package com.liferay.data.migration.tool;
+package com.liferay.data.migration.tool.service;
 
 import java.util.Date;
 

@@ -234,8 +234,8 @@ public class MigrationManagerLocalServiceUtil {
 	* Never reference this class directly. Always use {@link MigrationManagerLocalServiceUtil} to access the migration manager local service.
 	*/
 	public static java.util.concurrent.atomic.AtomicLong runEntityService(
-		MigrationEntityService entityService, java.util.Date startDate,
-		java.util.concurrent.atomic.AtomicLong count) {
+		MigrationEntityService entityService,
+		java.util.Date startDate, java.util.concurrent.atomic.AtomicLong count) {
 		return getService().runEntityService(entityService, startDate, count);
 	}
 
@@ -264,8 +264,8 @@ public class MigrationManagerLocalServiceUtil {
 	}
 
 	public static long migrateEntityBatch(
-		com.liferay.data.migration.tool.MigrationEntityService entityService,
-		java.util.List<com.liferay.data.migration.tool.MigrationEntity> batch) {
+		MigrationEntityService entityService,
+		java.util.List<MigrationEntity> batch) {
 		return getService().migrateEntityBatch(entityService, batch);
 	}
 

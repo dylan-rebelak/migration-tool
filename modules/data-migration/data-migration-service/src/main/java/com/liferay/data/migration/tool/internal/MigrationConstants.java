@@ -1,4 +1,4 @@
-package com.liferay.data.migration.tool.service;
+package com.liferay.data.migration.tool.internal;
 
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsUtil;

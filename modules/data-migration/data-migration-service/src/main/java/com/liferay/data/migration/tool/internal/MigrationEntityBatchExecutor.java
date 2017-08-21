@@ -1,7 +1,8 @@
-package com.liferay.data.migration.tool.service;
+package com.liferay.data.migration.tool.internal;
 
-import com.liferay.data.migration.tool.MigrationEntity;
-import com.liferay.data.migration.tool.MigrationEntityService;
+import com.liferay.data.migration.tool.service.MigrationEntity;
+import com.liferay.data.migration.tool.service.MigrationEntityService;
+import com.liferay.data.migration.tool.service.MigrationManagerLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringBundler;

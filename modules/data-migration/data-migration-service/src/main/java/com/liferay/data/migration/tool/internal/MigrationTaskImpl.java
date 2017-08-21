@@ -1,12 +1,13 @@
-package com.liferay.data.migration.tool.service;
+package com.liferay.data.migration.tool.internal;
 
-import static com.liferay.data.migration.tool.service.MigrationConstants.MAX_BATCH_QUEUE_SIZE;
-import static com.liferay.data.migration.tool.service.MigrationConstants.SYNC_REC_COUNT;
-import static com.liferay.data.migration.tool.service.MigrationConstants.THREAD_POOL_SIZE;
+import static com.liferay.data.migration.tool.internal.MigrationConstants.MAX_BATCH_QUEUE_SIZE;
+import static com.liferay.data.migration.tool.internal.MigrationConstants.SYNC_REC_COUNT;
+import static com.liferay.data.migration.tool.internal.MigrationConstants.THREAD_POOL_SIZE;
 
-import com.liferay.data.migration.tool.MigrationEntity;
-import com.liferay.data.migration.tool.MigrationEntityService;
-import com.liferay.data.migration.tool.MigrationTask;
+import com.liferay.data.migration.tool.service.MigrationEntity;
+import com.liferay.data.migration.tool.service.MigrationEntityService;
+import com.liferay.data.migration.tool.service.MigrationManagerLocalService;
+import com.liferay.data.migration.tool.service.MigrationTask;
 import com.liferay.portal.kernel.util.ListUtil;
 
 import java.util.Date;

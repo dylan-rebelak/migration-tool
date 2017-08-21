@@ -16,8 +16,6 @@ package com.liferay.data.migration.tool.service;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.data.migration.tool.MigrationEntity;
-import com.liferay.data.migration.tool.MigrationEntityService;
 import com.liferay.data.migration.tool.model.MigrationManager;
 
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
