@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.liferay.data.migration.tool.model.MigrationManager">
+		<field name="managerId" type="long" />
+		<field name="timeStarted" type="Date" />
+		<field name="timeCompleted" type="Date" />
+		<field name="fromDate" type="Date" />
+		<field name="recordsSynced" type="long" />
+	</model>
+</model-hints>

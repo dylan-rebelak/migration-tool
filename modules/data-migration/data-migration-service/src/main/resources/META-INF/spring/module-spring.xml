@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean class="com.liferay.data.migration.tool.service.impl.MigrationManagerLocalServiceImpl" id="com.liferay.data.migration.tool.service.MigrationManagerLocalService" />
+	<bean class="com.liferay.data.migration.tool.service.persistence.impl.MigrationManagerPersistenceImpl" id="com.liferay.data.migration.tool.service.persistence.MigrationManagerPersistence" parent="basePersistence" />
+</beans>
