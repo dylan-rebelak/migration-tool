@@ -94,7 +94,7 @@ public class MigrationHandlerImpl implements MigrationHandler {
 		service = MigrationEntityService.class, unbind = "unbind"
 
 	)
-	private List<MigrationEntityService> _migrationEntityServices;
+	private volatile List<MigrationEntityService> _migrationEntityServices;
 
 	@Reference
 	private MigrationManagerLocalService _migrationManagerLocalService;
