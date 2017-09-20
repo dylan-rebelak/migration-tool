@@ -69,8 +69,9 @@ public class MigrationTaskImpl implements MigrationTask {
 		int start = 0;
 
 		while (true) {
-			List<MigrationEntity> batch = _entityService.getEntities(
-				fromDate, start, start + _batchSize);
+			List<MigrationEntity> batch =
+				_entityService.getEntitiesModifiedSinceDate(
+					fromDate, start, start + _batchSize);
 
 			start += _batchSize;
 

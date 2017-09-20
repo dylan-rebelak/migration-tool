@@ -114,10 +114,11 @@ public class MigrationManagerLocalServiceImpl
 		try {
 			/*Date fromDate = (Date)_groupExpandoBridge.getAttribute(
 				MigrationConstants.getSyncDateAttributeName(entityName), false);
-
+			*/
 			Date fromDate = new Date();
-			count.addAndGet(doRunEntityService(entityService, fromDate));
 
+			count.addAndGet(doRunEntityService(entityService, fromDate));
+			/*
 			_groupExpandoBridge.setAttribute(
 				MigrationConstants.getSyncDateAttributeName(entityName),
 				startDate,

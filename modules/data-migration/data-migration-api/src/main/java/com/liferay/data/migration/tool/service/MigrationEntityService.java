@@ -32,8 +32,8 @@ public interface MigrationEntityService {
 
 	public abstract long dynamicQueryCount(DynamicQuery query);
 
-	public List<MigrationEntity> getEntities(
-		Date startDate, int start, int end);
+	public List<MigrationEntity> getEntitiesModifiedSinceDate(
+		Date sinceDate, int start, int end);
 
 	public default String getEntityName() {
 		Class<? extends MigrationEntityService> localServiceClass =

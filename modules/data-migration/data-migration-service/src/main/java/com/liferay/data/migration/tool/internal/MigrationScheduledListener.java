@@ -82,9 +82,7 @@ public class MigrationScheduledListener
 	protected void doReceive(Message message) throws Exception {
 		Lock lock = null;
 
-		String className = MigrationScheduledListener.class.toString();
-
-		className = className.substring(className.indexOf("com"));
+		String className = MigrationScheduledListener.class.getName();
 
 		String user = "Scheduled Task";
 
