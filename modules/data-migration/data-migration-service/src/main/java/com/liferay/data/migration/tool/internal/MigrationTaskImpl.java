@@ -64,13 +64,13 @@ public class MigrationTaskImpl implements MigrationTask {
 	}
 
 	@Override
-	public void run(Date fromDate) {
+	public void run(Date fromDate, Date now) {
 		int start = 0;
 
 		while (true) {
 			List<Object> batch =
 				_entityService.getEntitiesModifiedSinceDate(
-					fromDate, start, start + _batchSize);
+					fromDate, now, start, start + _batchSize);
 
 			start += _batchSize;
 

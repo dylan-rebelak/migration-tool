@@ -1,5 +1,6 @@
 package com.liferay.data.migration.tool.internal;
 
+import com.liferay.data.migration.tool.model.MigrationManager;
 import com.liferay.data.migration.tool.service.MigrationEntityService;
 import com.liferay.data.migration.tool.service.MigrationHandler;
 import com.liferay.data.migration.tool.service.MigrationManagerLocalService;
@@ -28,22 +29,12 @@ public class MigrationHandlerImpl implements MigrationHandler {
 	public void runMigration() {
 		Date timeStarted = new Date();
 
-		/* Group group = _groupLocalService.fetchGroup(
-			_portal.getDefaultCompanyId(), MAIN_SITE);
-
-		if (group == null) {
-			_log.error(
-				">>> Cannot run Data Migration: " +
-				MAIN_SITE + " does not exist");
-
-			return;
+		Date fromDate = new Date(0);
+		List<MigrationManager> migrationManagers =
+			_migrationManagerLocalService.getMigrationManagers(0, 1);
+		if(migrationManagers.size() > 0) {
+			fromDate = migrationManagers.get(0).getTimeStarted();
 		}
-
-		_groupExpandoBridge = group.getExpandoBridge();
-
-		Date fromDate = (Date)_groupExpandoBridge.getAttribute(
-			MIGRATION_DATE_ATTRIBUTE, false);*/
-		Date fromDate = new Date();
 
 		if (_log.isInfoEnabled()) {
 			_log.info(">>> Starting Data Migration...");

@@ -40,7 +40,7 @@ public class MigrateUserEntityService implements MigrationEntityService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public List<Object> getEntitiesModifiedSinceDate(
-		Date sinceDate, int start, int end)
+		Date sinceDate, Date now, int start, int end)
 	{
 
 		if (sinceDate.getTime() == 0) {
@@ -50,7 +50,7 @@ public class MigrateUserEntityService implements MigrationEntityService {
 		DynamicQuery dynamicQuery = dynamicQuery();
 
 		Criterion criterion = RestrictionsFactoryUtil.between(
-			"modifiedDate", sinceDate, new Date());
+			"modifiedDate", sinceDate, now);
 
 		dynamicQuery.add(criterion);
 

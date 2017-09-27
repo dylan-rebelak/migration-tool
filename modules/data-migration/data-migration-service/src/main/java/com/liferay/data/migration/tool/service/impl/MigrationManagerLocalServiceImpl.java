@@ -17,6 +17,7 @@ package com.liferay.data.migration.tool.service.impl;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.data.migration.tool.internal.MigrationTaskImpl;
+import com.liferay.data.migration.tool.model.EntityManager;
 import com.liferay.data.migration.tool.model.MigrationManager;
 import com.liferay.data.migration.tool.service.MigrationEntityService;
 import com.liferay.data.migration.tool.service.MigrationTask;
@@ -86,9 +87,6 @@ public class MigrationManagerLocalServiceImpl
 
 		MigrationManager manager = migrationManagerPersistence.create(syncId);
 
-		/*_groupExpandoBridge.setAttribute(
-			MIGRATION_DATE_ATTRIBUTE, timeStarted, false);*/
-
 		manager.setTimeCompleted(new Date());
 		manager.setFromDate(fromDate);
 		manager.setRecordsSynced(count);
@@ -111,17 +109,21 @@ public class MigrationManagerLocalServiceImpl
 		String entityName = entityService.getEntityName();
 
 		try {
-			/*Date fromDate = (Date)_groupExpandoBridge.getAttribute(
-				MigrationConstants.getSyncDateAttributeName(entityName), false);
-			*/
-			Date fromDate = new Date();
+			EntityManager entityManager =
+				entityManagerLocalService.fetchEntityManager(entityName);
 
-			count.addAndGet(doRunEntityService(entityService, fromDate));
-			/*
-			_groupExpandoBridge.setAttribute(
-				MigrationConstants.getSyncDateAttributeName(entityName),
-				startDate,
-				false);*/
+			if (entityManager == null) {
+				entityManager =
+					entityManagerLocalService.createEntityManager(entityName);
+				entityManager.setLastSyncDate(new Date(0));
+			}
+
+			Date fromDate = entityManager.getLastSyncDate();
+
+			count.addAndGet(doRunEntityService(entityService, fromDate, startDate));
+
+			entityManager.setLastSyncDate(startDate);
+			entityManagerLocalService.updateEntityManager(entityManager);
 		}
 		catch (Exception e) {
 			_log.error(">>> Failed to sync " + entityName, e);
@@ -141,12 +143,12 @@ public class MigrationManagerLocalServiceImpl
 	}
 
 	protected long doRunEntityService(
-		MigrationEntityService entityService, final Date fromDate) {
+		MigrationEntityService entityService, final Date fromDate, final Date now) {
 
 		String entityName = entityService.getEntityName();
 
 		if (_log.isDebugEnabled()) {
-			long total = entityService.countEntities(fromDate);
+			long total = entityService.countEntities(fromDate, now);
 
 			StringBundler msg = new StringBundler(4);
 
@@ -164,7 +166,7 @@ public class MigrationManagerLocalServiceImpl
 
 		MigrationTask task = createEntitySync(entityService);
 
-		task.run(fromDate);
+		task.run(fromDate, now);
 		task.blockUntilDone();
 
 		long count = task.getImportCount();

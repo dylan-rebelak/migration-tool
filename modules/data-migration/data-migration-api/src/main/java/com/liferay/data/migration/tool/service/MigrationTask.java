@@ -11,6 +11,6 @@ public interface MigrationTask {
 
 	public long getImportCount();
 
-	public void run(Date fromDate);
+	public void run(Date fromDate, Date now);
 
 }

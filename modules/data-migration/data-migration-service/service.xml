@@ -30,4 +30,13 @@
 			<order-column name="timeStarted" />
 		</order>
 	</entity>
+
+	<entity local-service="true" name="EntityManager" remote-service="false">
+
+		<column name="entityName" primary="true" type="String" />
+
+		<!-- started: Time of last completed sync for this entity -->
+
+		<column name="lastSyncDate" type="Date" />
+	</entity>
 </service-builder>
