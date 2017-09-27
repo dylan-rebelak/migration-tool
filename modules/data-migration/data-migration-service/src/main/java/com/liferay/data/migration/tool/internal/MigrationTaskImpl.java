@@ -4,7 +4,6 @@ import static com.liferay.data.migration.tool.internal.MigrationConstants.MAX_BA
 import static com.liferay.data.migration.tool.internal.MigrationConstants.SYNC_REC_COUNT;
 import static com.liferay.data.migration.tool.internal.MigrationConstants.THREAD_POOL_SIZE;
 
-import com.liferay.data.migration.tool.service.MigrationEntity;
 import com.liferay.data.migration.tool.service.MigrationEntityService;
 import com.liferay.data.migration.tool.service.MigrationManagerLocalService;
 import com.liferay.data.migration.tool.service.MigrationTask;
@@ -69,7 +68,7 @@ public class MigrationTaskImpl implements MigrationTask {
 		int start = 0;
 
 		while (true) {
-			List<MigrationEntity> batch =
+			List<Object> batch =
 				_entityService.getEntitiesModifiedSinceDate(
 					fromDate, start, start + _batchSize);
 
@@ -92,7 +91,7 @@ public class MigrationTaskImpl implements MigrationTask {
 	}
 
 	private MigrationEntityBatchExecutor _createSyncJob(
-		List<MigrationEntity> batch) {
+		List<Object> batch) {
 
 		MigrationEntityBatchExecutor batchSyncExecutor =
 			new MigrationEntityBatchExecutor(_entityService, batch, _count);

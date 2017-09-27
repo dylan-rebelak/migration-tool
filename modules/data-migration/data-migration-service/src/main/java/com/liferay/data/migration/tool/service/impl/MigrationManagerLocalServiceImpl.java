@@ -18,7 +18,6 @@ import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.data.migration.tool.internal.MigrationTaskImpl;
 import com.liferay.data.migration.tool.model.MigrationManager;
-import com.liferay.data.migration.tool.service.MigrationEntity;
 import com.liferay.data.migration.tool.service.MigrationEntityService;
 import com.liferay.data.migration.tool.service.MigrationTask;
 import com.liferay.data.migration.tool.service.base.MigrationManagerLocalServiceBaseImpl;
@@ -54,11 +53,11 @@ public class MigrationManagerLocalServiceImpl
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public long migrateEntityBatch(
-		MigrationEntityService entityService, List<MigrationEntity> batch) {
+		MigrationEntityService entityService, List<Object> batch) {
 
 		long count = 0;
 
-		for (MigrationEntity entity : batch) {
+		for (Object entity : batch) {
 			try {
 				entityService.syncEntity(entity);
 
@@ -68,9 +67,9 @@ public class MigrationManagerLocalServiceImpl
 				StringBundler msg = new StringBundler(4);
 
 				msg.append(">>> Could not sync ");
-				msg.append(entity.getEntityName());
+				//msg.append(entity.getEntityName());
 				msg.append(": ");
-				msg.append(entity.getPrimKey());
+				//msg.append(entity.getPrimKey());
 
 				_log.error(msg.toString(), e);
 			}

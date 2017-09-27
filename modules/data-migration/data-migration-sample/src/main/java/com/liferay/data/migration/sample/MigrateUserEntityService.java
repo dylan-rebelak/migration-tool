@@ -1,6 +1,5 @@
 package com.liferay.data.migration.sample;
 
-import com.liferay.data.migration.tool.service.MigrationEntity;
 import com.liferay.data.migration.tool.service.MigrationEntityService;
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -40,12 +39,12 @@ public class MigrateUserEntityService implements MigrationEntityService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public List<MigrationEntity> getEntitiesModifiedSinceDate(
+	public List<Object> getEntitiesModifiedSinceDate(
 		Date sinceDate, int start, int end)
 	{
 
 		if (sinceDate.getTime() == 0) {
-			return _asMigrationEntities(_userLocalService.getUsers(start, end));
+			return _asGenericEntities(_userLocalService.getUsers(start, end));
 		}
 
 		DynamicQuery dynamicQuery = dynamicQuery();
@@ -62,24 +61,24 @@ public class MigrateUserEntityService implements MigrationEntityService {
 			_log.debug("Found " + users.size() + " updated users.");
 		}
 
-		return _asMigrationEntities(users);
+		return _asGenericEntities(users);
 	}
 
-	private List<MigrationEntity> _asMigrationEntities(List<User> users) {
+	private List<Object> _asGenericEntities(List<User> users) {
 		return users.stream().filter(
 			Objects::nonNull).map(
-				this::_asMigrationEntity).collect(Collectors.toList());
+				this::_asGenericEntity).collect(Collectors.toList());
 	}
 
-	private MigrationEntity _asMigrationEntity(User user) {
-		return (MigrationEntity)user;
+	private Object _asGenericEntity(User user) {
+		return (Object)user;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		MigrateUserEntityService.class);
 
 	@Override
-	public void syncEntity(MigrationEntity entity) {
+	public void syncEntity(Object entity) {
 		User user = (User)entity;
 
 		_log.info("Migrated user: " + user.getFullName());
