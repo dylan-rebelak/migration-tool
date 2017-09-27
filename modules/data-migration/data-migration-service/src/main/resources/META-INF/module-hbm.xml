@@ -2,7 +2,14 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false" default-lazy="false">
+	<import class="com.liferay.data.migration.tool.model.EntityManager" />
 	<import class="com.liferay.data.migration.tool.model.MigrationManager" />
+	<class name="com.liferay.data.migration.tool.model.impl.EntityManagerImpl" table="SYNC_EntityManager">
+		<id name="entityName" type="java.lang.String">
+			<generator class="assigned" />
+		</id>
+		<property name="lastSyncDate" type="org.hibernate.type.TimestampType" />
+	</class>
 	<class name="com.liferay.data.migration.tool.model.impl.MigrationManagerImpl" table="SYNC_MigrationManager">
 		<id name="managerId" type="long">
 			<generator class="assigned" />

@@ -246,8 +246,8 @@ public class MigrationManagerLocalServiceWrapper
 	*/
 	@Override
 	public java.util.concurrent.atomic.AtomicLong runEntityService(
-		MigrationEntityService entityService,
-		java.util.Date startDate, java.util.concurrent.atomic.AtomicLong count) {
+		MigrationEntityService entityService, java.util.Date startDate,
+		java.util.concurrent.atomic.AtomicLong count) {
 		return _migrationManagerLocalService.runEntityService(entityService,
 			startDate, count);
 	}
@@ -280,9 +280,8 @@ public class MigrationManagerLocalServiceWrapper
 	}
 
 	@Override
-	public long migrateEntityBatch(
-		MigrationEntityService entityService,
-		java.util.List<MigrationEntity> batch) {
+	public long migrateEntityBatch(MigrationEntityService entityService,
+		java.util.List<java.lang.Object> batch) {
 		return _migrationManagerLocalService.migrateEntityBatch(entityService,
 			batch);
 	}

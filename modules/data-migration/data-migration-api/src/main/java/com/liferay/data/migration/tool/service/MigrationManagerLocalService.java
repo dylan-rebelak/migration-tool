@@ -243,7 +243,7 @@ public interface MigrationManagerLocalService extends BaseLocalService,
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public long migrateEntityBatch(MigrationEntityService entityService,
-		List<MigrationEntity> batch);
+		List<java.lang.Object> batch);
 
 	public void recordMigrationStatistics(Date fromDate, Date timeStarted,
 		long count);

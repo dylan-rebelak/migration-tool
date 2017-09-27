@@ -15,12 +15,12 @@ public interface MigrationEntityService {
 
 	public static final String LOCAL_SERVICE_IMPL_SUFFIX = "LocalServiceImpl";
 
-	public default long countEntities(Date startDate) {
+	public default long countEntities(Date startDate, Date now) {
 		DynamicQuery query = this.dynamicQuery();
 
 		if (startDate.getTime() != 0) {
 			Criterion criterion = RestrictionsFactoryUtil.between(
-				"modifiedDate", startDate, new Date());
+				"modifiedDate", startDate, now);
 
 			query.add(criterion);
 		}
@@ -32,8 +32,8 @@ public interface MigrationEntityService {
 
 	public abstract long dynamicQueryCount(DynamicQuery query);
 
-	public List<MigrationEntity> getEntitiesModifiedSinceDate(
-		Date sinceDate, int start, int end);
+	public List<Object> getEntitiesModifiedSinceDate(
+		Date sinceDate, Date now, int start, int end);
 
 	public default String getEntityName() {
 		Class<? extends MigrationEntityService> localServiceClass =
@@ -43,6 +43,6 @@ public interface MigrationEntityService {
 			localServiceClass.getSimpleName(), LOCAL_SERVICE_IMPL_SUFFIX);
 	}
 
-	public void syncEntity(MigrationEntity entity);
+	public void syncEntity(Object entity);
 
 }

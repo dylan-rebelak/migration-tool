@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 
 <model-hints>
+	<model name="com.liferay.data.migration.tool.model.EntityManager">
+		<field name="entityName" type="String" />
+		<field name="lastSyncDate" type="Date" />
+	</model>
 	<model name="com.liferay.data.migration.tool.model.MigrationManager">
 		<field name="managerId" type="long" />
 		<field name="timeStarted" type="Date" />
