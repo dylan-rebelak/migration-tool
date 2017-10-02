@@ -15,6 +15,10 @@
 	<entity local-service="true" name="Migration" remote-service="false">
 		<column name="migrationId" primary="true" type="long" />
 
+		<!-- fromDate: This is the date used to select all records changed from the given date. -->
+
+		<column name="fromDate" type="Date" />
+
 		<!-- started: Time this run started -->
 
 		<column name="timeStarted" type="Date" />
@@ -22,10 +26,6 @@
 		<!-- completed: Time this run completed -->
 
 		<column name="timeCompleted" type="Date" />
-
-		<!-- fromDate: This is the date used to select all records changed from the given date. -->
-
-		<column name="fromDate" type="Date" />
 
 		<!-- recordsSynced: This is the count of records synced during this run -->
 
