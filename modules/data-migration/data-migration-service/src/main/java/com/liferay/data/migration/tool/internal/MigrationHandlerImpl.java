@@ -46,7 +46,7 @@ public class MigrationHandlerImpl implements MigrationHandler {
 			_log.info(">>> Data Migration finished.");
 		}
 
-		_migrationLocalService.recordMigrationStatistics(
+		_migrationLocalService.addMigration(
 			fromDate, timeStarted, entityCount);
 	}
 

@@ -51,6 +51,20 @@ import org.apache.commons.lang.time.StopWatch;
 @ProviderType
 public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 
+	public void addMigration(Date fromDate, Date timeStarted, long count) {
+		long migrationId = counterLocalService.increment(
+			Migration.class.getName());
+
+		Migration migration = migrationPersistence.create(migrationId);
+
+		migration.setFromDate(fromDate);
+		migration.setTimeCompleted(new Date());
+		migration.setTimeStarted(timeStarted);
+		migration.setRecordsSynced(count);
+
+		addMigration(migration);
+	}
+
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public long migrateEntityBatch(
 		MigrationEntityService entityService, List<Object> batch) {
@@ -76,21 +90,6 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 		}
 
 		return count;
-	}
-
-	public void recordMigrationStatistics(
-		Date fromDate, Date timeStarted, long count) {
-
-		long syncId = counterLocalService.increment(Migration.class.getName());
-
-		Migration migration = migrationPersistence.create(syncId);
-
-		migration.setTimeCompleted(new Date());
-		migration.setFromDate(fromDate);
-		migration.setRecordsSynced(count);
-		migration.setTimeStarted(timeStarted);
-
-		addMigration(migration);
 	}
 
 	/**
