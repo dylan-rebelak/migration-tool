@@ -93,6 +93,10 @@ public class MigrationLocalServiceUtil {
 		return getService().fetchMigration(migrationId);
 	}
 
+	public static com.liferay.data.migration.tool.model.Migration getLastMigration() {
+		return getService().getLastMigration();
+	}
+
 	/**
 	* Returns the migration with the primary key.
 	*
@@ -269,9 +273,9 @@ public class MigrationLocalServiceUtil {
 		return getService().migrateEntityBatch(entityService, batch);
 	}
 
-	public static void recordMigrationStatistics(java.util.Date fromDate,
+	public static void addMigration(java.util.Date fromDate,
 		java.util.Date timeStarted, long count) {
-		getService().recordMigrationStatistics(fromDate, timeStarted, count);
+		getService().addMigration(fromDate, timeStarted, count);
 	}
 
 	public static MigrationLocalService getService() {

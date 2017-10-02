@@ -7,9 +7,9 @@
 	</model>
 	<model name="com.liferay.data.migration.tool.model.Migration">
 		<field name="migrationId" type="long" />
+		<field name="fromDate" type="Date" />
 		<field name="timeStarted" type="Date" />
 		<field name="timeCompleted" type="Date" />
-		<field name="fromDate" type="Date" />
 		<field name="recordsSynced" type="long" />
 	</model>
 </model-hints>

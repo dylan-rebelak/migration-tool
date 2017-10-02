@@ -122,11 +122,11 @@ public class MigrationPersistenceTest {
 
 		Migration newMigration = _persistence.create(pk);
 
+		newMigration.setFromDate(RandomTestUtil.nextDate());
+
 		newMigration.setTimeStarted(RandomTestUtil.nextDate());
 
 		newMigration.setTimeCompleted(RandomTestUtil.nextDate());
-
-		newMigration.setFromDate(RandomTestUtil.nextDate());
 
 		newMigration.setRecordsSynced(RandomTestUtil.nextLong());
 
@@ -137,14 +137,14 @@ public class MigrationPersistenceTest {
 		Assert.assertEquals(existingMigration.getMigrationId(),
 			newMigration.getMigrationId());
 		Assert.assertEquals(Time.getShortTimestamp(
+				existingMigration.getFromDate()),
+			Time.getShortTimestamp(newMigration.getFromDate()));
+		Assert.assertEquals(Time.getShortTimestamp(
 				existingMigration.getTimeStarted()),
 			Time.getShortTimestamp(newMigration.getTimeStarted()));
 		Assert.assertEquals(Time.getShortTimestamp(
 				existingMigration.getTimeCompleted()),
 			Time.getShortTimestamp(newMigration.getTimeCompleted()));
-		Assert.assertEquals(Time.getShortTimestamp(
-				existingMigration.getFromDate()),
-			Time.getShortTimestamp(newMigration.getFromDate()));
 		Assert.assertEquals(existingMigration.getRecordsSynced(),
 			newMigration.getRecordsSynced());
 	}
@@ -173,8 +173,8 @@ public class MigrationPersistenceTest {
 
 	protected OrderByComparator<Migration> getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("SYNC_Migration",
-			"migrationId", true, "timeStarted", true, "timeCompleted", true,
-			"fromDate", true, "recordsSynced", true);
+			"migrationId", true, "fromDate", true, "timeStarted", true,
+			"timeCompleted", true, "recordsSynced", true);
 	}
 
 	@Test
@@ -374,11 +374,11 @@ public class MigrationPersistenceTest {
 
 		Migration migration = _persistence.create(pk);
 
+		migration.setFromDate(RandomTestUtil.nextDate());
+
 		migration.setTimeStarted(RandomTestUtil.nextDate());
 
 		migration.setTimeCompleted(RandomTestUtil.nextDate());
-
-		migration.setFromDate(RandomTestUtil.nextDate());
 
 		migration.setRecordsSynced(RandomTestUtil.nextLong());
 

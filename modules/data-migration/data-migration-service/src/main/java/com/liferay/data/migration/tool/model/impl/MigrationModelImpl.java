@@ -63,22 +63,22 @@ public class MigrationModelImpl extends BaseModelImpl<Migration>
 	public static final String TABLE_NAME = "SYNC_Migration";
 	public static final Object[][] TABLE_COLUMNS = {
 			{ "migrationId", Types.BIGINT },
+			{ "fromDate", Types.TIMESTAMP },
 			{ "timeStarted", Types.TIMESTAMP },
 			{ "timeCompleted", Types.TIMESTAMP },
-			{ "fromDate", Types.TIMESTAMP },
 			{ "recordsSynced", Types.BIGINT }
 		};
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP = new HashMap<String, Integer>();
 
 	static {
 		TABLE_COLUMNS_MAP.put("migrationId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("fromDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("timeStarted", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("timeCompleted", Types.TIMESTAMP);
-		TABLE_COLUMNS_MAP.put("fromDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("recordsSynced", Types.BIGINT);
 	}
 
-	public static final String TABLE_SQL_CREATE = "create table SYNC_Migration (migrationId LONG not null primary key,timeStarted DATE null,timeCompleted DATE null,fromDate DATE null,recordsSynced LONG)";
+	public static final String TABLE_SQL_CREATE = "create table SYNC_Migration (migrationId LONG not null primary key,fromDate DATE null,timeStarted DATE null,timeCompleted DATE null,recordsSynced LONG)";
 	public static final String TABLE_SQL_DROP = "drop table SYNC_Migration";
 	public static final String ORDER_BY_JPQL = " ORDER BY migration.timeStarted DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY SYNC_Migration.timeStarted DESC";
@@ -133,9 +133,9 @@ public class MigrationModelImpl extends BaseModelImpl<Migration>
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("migrationId", getMigrationId());
+		attributes.put("fromDate", getFromDate());
 		attributes.put("timeStarted", getTimeStarted());
 		attributes.put("timeCompleted", getTimeCompleted());
-		attributes.put("fromDate", getFromDate());
 		attributes.put("recordsSynced", getRecordsSynced());
 
 		attributes.put("entityCacheEnabled", isEntityCacheEnabled());
@@ -152,6 +152,12 @@ public class MigrationModelImpl extends BaseModelImpl<Migration>
 			setMigrationId(migrationId);
 		}
 
+		Date fromDate = (Date)attributes.get("fromDate");
+
+		if (fromDate != null) {
+			setFromDate(fromDate);
+		}
+
 		Date timeStarted = (Date)attributes.get("timeStarted");
 
 		if (timeStarted != null) {
@@ -162,12 +168,6 @@ public class MigrationModelImpl extends BaseModelImpl<Migration>
 
 		if (timeCompleted != null) {
 			setTimeCompleted(timeCompleted);
-		}
-
-		Date fromDate = (Date)attributes.get("fromDate");
-
-		if (fromDate != null) {
-			setFromDate(fromDate);
 		}
 
 		Long recordsSynced = (Long)attributes.get("recordsSynced");
@@ -188,6 +188,16 @@ public class MigrationModelImpl extends BaseModelImpl<Migration>
 	}
 
 	@Override
+	public Date getFromDate() {
+		return _fromDate;
+	}
+
+	@Override
+	public void setFromDate(Date fromDate) {
+		_fromDate = fromDate;
+	}
+
+	@Override
 	public Date getTimeStarted() {
 		return _timeStarted;
 	}
@@ -205,16 +215,6 @@ public class MigrationModelImpl extends BaseModelImpl<Migration>
 	@Override
 	public void setTimeCompleted(Date timeCompleted) {
 		_timeCompleted = timeCompleted;
-	}
-
-	@Override
-	public Date getFromDate() {
-		return _fromDate;
-	}
-
-	@Override
-	public void setFromDate(Date fromDate) {
-		_fromDate = fromDate;
 	}
 
 	@Override
@@ -255,9 +255,9 @@ public class MigrationModelImpl extends BaseModelImpl<Migration>
 		MigrationImpl migrationImpl = new MigrationImpl();
 
 		migrationImpl.setMigrationId(getMigrationId());
+		migrationImpl.setFromDate(getFromDate());
 		migrationImpl.setTimeStarted(getTimeStarted());
 		migrationImpl.setTimeCompleted(getTimeCompleted());
-		migrationImpl.setFromDate(getFromDate());
 		migrationImpl.setRecordsSynced(getRecordsSynced());
 
 		migrationImpl.resetOriginalValues();
@@ -327,6 +327,15 @@ public class MigrationModelImpl extends BaseModelImpl<Migration>
 
 		migrationCacheModel.migrationId = getMigrationId();
 
+		Date fromDate = getFromDate();
+
+		if (fromDate != null) {
+			migrationCacheModel.fromDate = fromDate.getTime();
+		}
+		else {
+			migrationCacheModel.fromDate = Long.MIN_VALUE;
+		}
+
 		Date timeStarted = getTimeStarted();
 
 		if (timeStarted != null) {
@@ -345,15 +354,6 @@ public class MigrationModelImpl extends BaseModelImpl<Migration>
 			migrationCacheModel.timeCompleted = Long.MIN_VALUE;
 		}
 
-		Date fromDate = getFromDate();
-
-		if (fromDate != null) {
-			migrationCacheModel.fromDate = fromDate.getTime();
-		}
-		else {
-			migrationCacheModel.fromDate = Long.MIN_VALUE;
-		}
-
 		migrationCacheModel.recordsSynced = getRecordsSynced();
 
 		return migrationCacheModel;
@@ -365,12 +365,12 @@ public class MigrationModelImpl extends BaseModelImpl<Migration>
 
 		sb.append("{migrationId=");
 		sb.append(getMigrationId());
+		sb.append(", fromDate=");
+		sb.append(getFromDate());
 		sb.append(", timeStarted=");
 		sb.append(getTimeStarted());
 		sb.append(", timeCompleted=");
 		sb.append(getTimeCompleted());
-		sb.append(", fromDate=");
-		sb.append(getFromDate());
 		sb.append(", recordsSynced=");
 		sb.append(getRecordsSynced());
 		sb.append("}");
@@ -391,16 +391,16 @@ public class MigrationModelImpl extends BaseModelImpl<Migration>
 		sb.append(getMigrationId());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>fromDate</column-name><column-value><![CDATA[");
+		sb.append(getFromDate());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>timeStarted</column-name><column-value><![CDATA[");
 		sb.append(getTimeStarted());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>timeCompleted</column-name><column-value><![CDATA[");
 		sb.append(getTimeCompleted());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>fromDate</column-name><column-value><![CDATA[");
-		sb.append(getFromDate());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>recordsSynced</column-name><column-value><![CDATA[");
@@ -417,9 +417,9 @@ public class MigrationModelImpl extends BaseModelImpl<Migration>
 			Migration.class
 		};
 	private long _migrationId;
+	private Date _fromDate;
 	private Date _timeStarted;
 	private Date _timeCompleted;
-	private Date _fromDate;
 	private long _recordsSynced;
 	private Migration _escapedModel;
 }

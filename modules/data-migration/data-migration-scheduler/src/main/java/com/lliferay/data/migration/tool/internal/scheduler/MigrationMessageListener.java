@@ -1,6 +1,6 @@
 package com.lliferay.data.migration.tool.internal.scheduler;
 
-import com.liferay.data.migration.tool.service.MigrationHandler;
+import com.liferay.data.migration.tool.service.MigrationExecutor;
 import com.liferay.portal.kernel.lock.Lock;
 import com.liferay.portal.kernel.lock.LockManager;
 import com.liferay.portal.kernel.log.Log;
@@ -104,7 +104,7 @@ public class MigrationMessageListener
 		}
 
 		try {
-			_migrationHandler.runMigration();
+			_migrationExectuor.execute();
 		}
 		finally {
 			_lockManager.unlock(lock.getClassName(), lock.getKey());
@@ -135,7 +135,7 @@ public class MigrationMessageListener
 	private LockManager _lockManager;
 
 	@Reference
-	private MigrationHandler _migrationHandler;
+	private MigrationExecutor _migrationExectuor;
 
 	@Reference
 	private SchedulerEngineHelper _schedulerEngineHelper;

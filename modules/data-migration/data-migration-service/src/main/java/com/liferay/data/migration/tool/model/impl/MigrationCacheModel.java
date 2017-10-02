@@ -69,12 +69,12 @@ public class MigrationCacheModel implements CacheModel<Migration>,
 
 		sb.append("{migrationId=");
 		sb.append(migrationId);
+		sb.append(", fromDate=");
+		sb.append(fromDate);
 		sb.append(", timeStarted=");
 		sb.append(timeStarted);
 		sb.append(", timeCompleted=");
 		sb.append(timeCompleted);
-		sb.append(", fromDate=");
-		sb.append(fromDate);
 		sb.append(", recordsSynced=");
 		sb.append(recordsSynced);
 		sb.append("}");
@@ -87,6 +87,13 @@ public class MigrationCacheModel implements CacheModel<Migration>,
 		MigrationImpl migrationImpl = new MigrationImpl();
 
 		migrationImpl.setMigrationId(migrationId);
+
+		if (fromDate == Long.MIN_VALUE) {
+			migrationImpl.setFromDate(null);
+		}
+		else {
+			migrationImpl.setFromDate(new Date(fromDate));
+		}
 
 		if (timeStarted == Long.MIN_VALUE) {
 			migrationImpl.setTimeStarted(null);
@@ -102,13 +109,6 @@ public class MigrationCacheModel implements CacheModel<Migration>,
 			migrationImpl.setTimeCompleted(new Date(timeCompleted));
 		}
 
-		if (fromDate == Long.MIN_VALUE) {
-			migrationImpl.setFromDate(null);
-		}
-		else {
-			migrationImpl.setFromDate(new Date(fromDate));
-		}
-
 		migrationImpl.setRecordsSynced(recordsSynced);
 
 		migrationImpl.resetOriginalValues();
@@ -119,9 +119,9 @@ public class MigrationCacheModel implements CacheModel<Migration>,
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		migrationId = objectInput.readLong();
+		fromDate = objectInput.readLong();
 		timeStarted = objectInput.readLong();
 		timeCompleted = objectInput.readLong();
-		fromDate = objectInput.readLong();
 
 		recordsSynced = objectInput.readLong();
 	}
@@ -130,16 +130,16 @@ public class MigrationCacheModel implements CacheModel<Migration>,
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
 		objectOutput.writeLong(migrationId);
+		objectOutput.writeLong(fromDate);
 		objectOutput.writeLong(timeStarted);
 		objectOutput.writeLong(timeCompleted);
-		objectOutput.writeLong(fromDate);
 
 		objectOutput.writeLong(recordsSynced);
 	}
 
 	public long migrationId;
+	public long fromDate;
 	public long timeStarted;
 	public long timeCompleted;
-	public long fromDate;
 	public long recordsSynced;
 }

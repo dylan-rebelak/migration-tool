@@ -76,6 +76,20 @@ public interface MigrationModel extends BaseModel<Migration> {
 	public void setMigrationId(long migrationId);
 
 	/**
+	 * Returns the from date of this migration.
+	 *
+	 * @return the from date of this migration
+	 */
+	public Date getFromDate();
+
+	/**
+	 * Sets the from date of this migration.
+	 *
+	 * @param fromDate the from date of this migration
+	 */
+	public void setFromDate(Date fromDate);
+
+	/**
 	 * Returns the time started of this migration.
 	 *
 	 * @return the time started of this migration
@@ -102,20 +116,6 @@ public interface MigrationModel extends BaseModel<Migration> {
 	 * @param timeCompleted the time completed of this migration
 	 */
 	public void setTimeCompleted(Date timeCompleted);
-
-	/**
-	 * Returns the from date of this migration.
-	 *
-	 * @return the from date of this migration
-	 */
-	public Date getFromDate();
-
-	/**
-	 * Sets the from date of this migration.
-	 *
-	 * @param fromDate the from date of this migration
-	 */
-	public void setFromDate(Date fromDate);
 
 	/**
 	 * Returns the records synced of this migration.

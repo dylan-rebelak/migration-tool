@@ -14,9 +14,9 @@
 		<id name="migrationId" type="long">
 			<generator class="assigned" />
 		</id>
+		<property name="fromDate" type="org.hibernate.type.TimestampType" />
 		<property name="timeStarted" type="org.hibernate.type.TimestampType" />
 		<property name="timeCompleted" type="org.hibernate.type.TimestampType" />
-		<property name="fromDate" type="org.hibernate.type.TimestampType" />
 		<property name="recordsSynced" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 	</class>
 </hibernate-mapping>

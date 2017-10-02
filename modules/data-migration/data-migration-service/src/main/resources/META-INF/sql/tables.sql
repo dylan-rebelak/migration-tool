@@ -5,8 +5,8 @@ create table SYNC_EntityManager (
 
 create table SYNC_Migration (
 	migrationId LONG not null primary key,
+	fromDate DATE null,
 	timeStarted DATE null,
 	timeCompleted DATE null,
-	fromDate DATE null,
 	recordsSynced LONG
 );

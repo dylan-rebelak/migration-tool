@@ -58,9 +58,9 @@ public class MigrationWrapper implements Migration, ModelWrapper<Migration> {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("migrationId", getMigrationId());
+		attributes.put("fromDate", getFromDate());
 		attributes.put("timeStarted", getTimeStarted());
 		attributes.put("timeCompleted", getTimeCompleted());
-		attributes.put("fromDate", getFromDate());
 		attributes.put("recordsSynced", getRecordsSynced());
 
 		return attributes;
@@ -74,6 +74,12 @@ public class MigrationWrapper implements Migration, ModelWrapper<Migration> {
 			setMigrationId(migrationId);
 		}
 
+		Date fromDate = (Date)attributes.get("fromDate");
+
+		if (fromDate != null) {
+			setFromDate(fromDate);
+		}
+
 		Date timeStarted = (Date)attributes.get("timeStarted");
 
 		if (timeStarted != null) {
@@ -84,12 +90,6 @@ public class MigrationWrapper implements Migration, ModelWrapper<Migration> {
 
 		if (timeCompleted != null) {
 			setTimeCompleted(timeCompleted);
-		}
-
-		Date fromDate = (Date)attributes.get("fromDate");
-
-		if (fromDate != null) {
-			setFromDate(fromDate);
 		}
 
 		Long recordsSynced = (Long)attributes.get("recordsSynced");

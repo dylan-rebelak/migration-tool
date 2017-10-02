@@ -103,6 +103,9 @@ public interface MigrationLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Migration fetchMigration(long migrationId);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Migration getLastMigration();
+
 	/**
 	* Returns the migration with the primary key.
 	*
@@ -241,6 +244,5 @@ public interface MigrationLocalService extends BaseLocalService,
 	public long migrateEntityBatch(MigrationEntityService entityService,
 		List<java.lang.Object> batch);
 
-	public void recordMigrationStatistics(Date fromDate, Date timeStarted,
-		long count);
+	public void addMigration(Date fromDate, Date timeStarted, long count);
 }

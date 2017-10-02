@@ -89,6 +89,11 @@ public class MigrationLocalServiceWrapper implements MigrationLocalService,
 		return _migrationLocalService.fetchMigration(migrationId);
 	}
 
+	@Override
+	public com.liferay.data.migration.tool.model.Migration getLastMigration() {
+		return _migrationLocalService.getLastMigration();
+	}
+
 	/**
 	* Returns the migration with the primary key.
 	*
@@ -283,10 +288,9 @@ public class MigrationLocalServiceWrapper implements MigrationLocalService,
 	}
 
 	@Override
-	public void recordMigrationStatistics(java.util.Date fromDate,
+	public void addMigration(java.util.Date fromDate,
 		java.util.Date timeStarted, long count) {
-		_migrationLocalService.recordMigrationStatistics(fromDate, timeStarted,
-			count);
+		_migrationLocalService.addMigration(fromDate, timeStarted, count);
 	}
 
 	@Override

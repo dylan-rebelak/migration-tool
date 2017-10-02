@@ -311,9 +311,9 @@ public class MigrationPersistenceImpl extends BasePersistenceImpl<Migration>
 		migrationImpl.setPrimaryKey(migration.getPrimaryKey());
 
 		migrationImpl.setMigrationId(migration.getMigrationId());
+		migrationImpl.setFromDate(migration.getFromDate());
 		migrationImpl.setTimeStarted(migration.getTimeStarted());
 		migrationImpl.setTimeCompleted(migration.getTimeCompleted());
-		migrationImpl.setFromDate(migration.getFromDate());
 		migrationImpl.setRecordsSynced(migration.getRecordsSynced());
 
 		return migrationImpl;
