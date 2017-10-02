@@ -51,15 +51,15 @@ import org.apache.commons.lang.time.StopWatch;
 @ProviderType
 public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 
-	public void addMigration(Date fromDate, Date timeStarted, long count) {
+	public void addMigration(Date fromDate, Date startTime, long count) {
 		long migrationId = counterLocalService.increment(
 			Migration.class.getName());
 
 		Migration migration = migrationPersistence.create(migrationId);
 
 		migration.setFromDate(fromDate);
+		migration.setTimeStarted(startTime);
 		migration.setTimeCompleted(new Date());
-		migration.setTimeStarted(timeStarted);
 		migration.setRecordsSynced(count);
 
 		addMigration(migration);

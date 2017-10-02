@@ -104,7 +104,7 @@ public class MigrationMessageListener
 		}
 
 		try {
-			_migrationExectuor.execute();
+			_migrationExecutor.execute();
 		}
 		finally {
 			_lockManager.unlock(lock.getClassName(), lock.getKey());
@@ -135,7 +135,7 @@ public class MigrationMessageListener
 	private LockManager _lockManager;
 
 	@Reference
-	private MigrationExecutor _migrationExectuor;
+	private MigrationExecutor _migrationExecutor;
 
 	@Reference
 	private SchedulerEngineHelper _schedulerEngineHelper;
