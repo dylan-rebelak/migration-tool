@@ -27,18 +27,24 @@ public class MigrationHandlerImpl implements MigrationHandler {
 
 	@Override
 	public void runMigration() {
-		Date timeStarted = new Date();
-
 		Date fromDate = new Date(0);
+
 		List<Migration> migrations = _migrationLocalService.getMigrations(0, 1);
 
 		if (migrations.isEmpty()) {
 			fromDate = migrations.get(0).getTimeStarted();
 		}
 
+		runMigration(fromDate);
+	}
+
+	@Override
+	public void runMigration(Date fromDate) {
 		if (_log.isInfoEnabled()) {
 			_log.info(">>> Starting Data Migration...");
 		}
+
+		Date timeStarted = new Date();
 
 		long entityCount = _runEntityServices(timeStarted);
 
@@ -46,8 +52,7 @@ public class MigrationHandlerImpl implements MigrationHandler {
 			_log.info(">>> Data Migration finished.");
 		}
 
-		_migrationLocalService.addMigration(
-			fromDate, timeStarted, entityCount);
+		_migrationLocalService.addMigration(fromDate, timeStarted, entityCount);
 	}
 
 	protected void bind(MigrationEntityService entityService) {
