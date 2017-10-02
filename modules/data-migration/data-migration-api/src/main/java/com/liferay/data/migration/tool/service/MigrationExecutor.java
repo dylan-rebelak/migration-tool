@@ -5,10 +5,10 @@ import java.util.Date;
 /**
  * @author Dylan Rebelak
  */
-public interface MigrationHandler {
+public interface MigrationExecutor {
 
-	public void runMigration();
+	public void execute();
 
-	public void runMigration(Date fromDate);
+	public void execute(Date fromDate);
 
 }

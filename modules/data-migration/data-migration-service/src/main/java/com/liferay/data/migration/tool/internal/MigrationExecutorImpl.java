@@ -2,7 +2,7 @@ package com.liferay.data.migration.tool.internal;
 
 import com.liferay.data.migration.tool.model.Migration;
 import com.liferay.data.migration.tool.service.MigrationEntityService;
-import com.liferay.data.migration.tool.service.MigrationHandler;
+import com.liferay.data.migration.tool.service.MigrationExecutor;
 import com.liferay.data.migration.tool.service.MigrationLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -22,16 +22,16 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 /**
  * @author Dylan Rebelak
  */
-@Component(immediate = true, service = MigrationHandler.class)
-public class MigrationHandlerImpl implements MigrationHandler {
+@Component(immediate = true, service = MigrationExecutor.class)
+public class MigrationExecutorImpl implements MigrationExecutor {
 
 	@Override
-	public void runMigration() {
-		runMigration(_getLastMigrationStartTime());
+	public void execute() {
+		execute(_getLastMigrationStartTime());
 	}
 
 	@Override
-	public void runMigration(Date fromDate) {
+	public void execute(Date fromDate) {
 		if (_log.isInfoEnabled()) {
 			_log.info(">>> Starting Data Migration...");
 		}
@@ -82,10 +82,10 @@ public class MigrationHandlerImpl implements MigrationHandler {
 		return count.longValue();
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		MigrationHandlerImpl.class);
-
 	private static final Date _EPOCH = new Date(0);
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		MigrationExecutorImpl.class);
 
 	@Reference
 	private GroupLocalService _groupLocalService;
