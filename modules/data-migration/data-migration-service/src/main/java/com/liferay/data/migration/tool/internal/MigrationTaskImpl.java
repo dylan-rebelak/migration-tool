@@ -5,7 +5,7 @@ import static com.liferay.data.migration.tool.internal.MigrationConstants.SYNC_R
 import static com.liferay.data.migration.tool.internal.MigrationConstants.THREAD_POOL_SIZE;
 
 import com.liferay.data.migration.tool.service.MigrationEntityService;
-import com.liferay.data.migration.tool.service.MigrationManagerLocalService;
+import com.liferay.data.migration.tool.service.MigrationLocalService;
 import com.liferay.data.migration.tool.service.MigrationTask;
 import com.liferay.portal.kernel.util.ListUtil;
 
@@ -68,9 +68,8 @@ public class MigrationTaskImpl implements MigrationTask {
 		int start = 0;
 
 		while (true) {
-			List<Object> batch =
-				_entityService.getEntitiesModifiedSinceDate(
-					fromDate, now, start, start + _batchSize);
+			List<Object> batch = _entityService.getEntitiesModifiedSinceDate(
+				fromDate, now, start, start + _batchSize);
 
 			start += _batchSize;
 
@@ -84,20 +83,17 @@ public class MigrationTaskImpl implements MigrationTask {
 		_threadPoolExecutor.shutdown();
 	}
 
-	public void setMigrationManagerLocalService(
-		MigrationManagerLocalService migrationManagerLocalService) {
+	public void setMigrationLocalService(
+		MigrationLocalService migrationLocalService) {
 
-		_migrationManagerLocalService = migrationManagerLocalService;
+		_migrationLocalService = migrationLocalService;
 	}
 
-	private MigrationEntityBatchExecutor _createSyncJob(
-		List<Object> batch) {
-
+	private MigrationEntityBatchExecutor _createSyncJob(List<Object> batch) {
 		MigrationEntityBatchExecutor batchSyncExecutor =
 			new MigrationEntityBatchExecutor(_entityService, batch, _count);
 
-		batchSyncExecutor.setMigrationManagerLocalService(
-			_migrationManagerLocalService);
+		batchSyncExecutor.setMigrationLocalService(_migrationLocalService);
 
 		return batchSyncExecutor;
 	}
@@ -107,7 +103,7 @@ public class MigrationTaskImpl implements MigrationTask {
 	private int _batchSize;
 	private AtomicLong _count;
 	private MigrationEntityService _entityService;
-	private MigrationManagerLocalService _migrationManagerLocalService;
+	private MigrationLocalService _migrationLocalService;
 	private ThreadPoolExecutor _threadPoolExecutor;
 
 }

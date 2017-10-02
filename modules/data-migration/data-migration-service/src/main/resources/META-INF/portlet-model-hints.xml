@@ -5,8 +5,8 @@
 		<field name="entityName" type="String" />
 		<field name="lastSyncDate" type="Date" />
 	</model>
-	<model name="com.liferay.data.migration.tool.model.MigrationManager">
-		<field name="managerId" type="long" />
+	<model name="com.liferay.data.migration.tool.model.Migration">
+		<field name="migrationId" type="long" />
 		<field name="timeStarted" type="Date" />
 		<field name="timeCompleted" type="Date" />
 		<field name="fromDate" type="Date" />

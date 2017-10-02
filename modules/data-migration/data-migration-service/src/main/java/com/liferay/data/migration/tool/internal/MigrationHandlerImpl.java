@@ -1,9 +1,9 @@
 package com.liferay.data.migration.tool.internal;
 
-import com.liferay.data.migration.tool.model.MigrationManager;
+import com.liferay.data.migration.tool.model.Migration;
 import com.liferay.data.migration.tool.service.MigrationEntityService;
 import com.liferay.data.migration.tool.service.MigrationHandler;
-import com.liferay.data.migration.tool.service.MigrationManagerLocalService;
+import com.liferay.data.migration.tool.service.MigrationLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.GroupLocalService;
@@ -30,10 +30,10 @@ public class MigrationHandlerImpl implements MigrationHandler {
 		Date timeStarted = new Date();
 
 		Date fromDate = new Date(0);
-		List<MigrationManager> migrationManagers =
-			_migrationManagerLocalService.getMigrationManagers(0, 1);
-		if(migrationManagers.size() > 0) {
-			fromDate = migrationManagers.get(0).getTimeStarted();
+		List<Migration> migrations = _migrationLocalService.getMigrations(0, 1);
+
+		if (migrations.isEmpty()) {
+			fromDate = migrations.get(0).getTimeStarted();
 		}
 
 		if (_log.isInfoEnabled()) {
@@ -46,7 +46,7 @@ public class MigrationHandlerImpl implements MigrationHandler {
 			_log.info(">>> Data Migration finished.");
 		}
 
-		_migrationManagerLocalService.recordMigrationStatistics(
+		_migrationLocalService.recordMigrationStatistics(
 			fromDate, timeStarted, entityCount);
 	}
 
@@ -67,7 +67,7 @@ public class MigrationHandlerImpl implements MigrationHandler {
 
 		_migrationEntityServices.parallelStream().forEach(
 			migrationEntityService ->
-				_migrationManagerLocalService.runEntityService(
+				_migrationLocalService.runEntityService(
 					migrationEntityService, startDate, count));
 
 		return count.longValue();
@@ -88,7 +88,7 @@ public class MigrationHandlerImpl implements MigrationHandler {
 	private volatile List<MigrationEntityService> _migrationEntityServices;
 
 	@Reference
-	private MigrationManagerLocalService _migrationManagerLocalService;
+	private MigrationLocalService _migrationLocalService;
 
 	@Reference
 	private Portal _portal;

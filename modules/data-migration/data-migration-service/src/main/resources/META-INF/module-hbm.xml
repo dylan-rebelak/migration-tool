@@ -3,15 +3,15 @@
 
 <hibernate-mapping auto-import="false" default-lazy="false">
 	<import class="com.liferay.data.migration.tool.model.EntityManager" />
-	<import class="com.liferay.data.migration.tool.model.MigrationManager" />
+	<import class="com.liferay.data.migration.tool.model.Migration" />
 	<class name="com.liferay.data.migration.tool.model.impl.EntityManagerImpl" table="SYNC_EntityManager">
 		<id name="entityName" type="java.lang.String">
 			<generator class="assigned" />
 		</id>
 		<property name="lastSyncDate" type="org.hibernate.type.TimestampType" />
 	</class>
-	<class name="com.liferay.data.migration.tool.model.impl.MigrationManagerImpl" table="SYNC_MigrationManager">
-		<id name="managerId" type="long">
+	<class name="com.liferay.data.migration.tool.model.impl.MigrationImpl" table="SYNC_Migration">
+		<id name="migrationId" type="long">
 			<generator class="assigned" />
 		</id>
 		<property name="timeStarted" type="org.hibernate.type.TimestampType" />

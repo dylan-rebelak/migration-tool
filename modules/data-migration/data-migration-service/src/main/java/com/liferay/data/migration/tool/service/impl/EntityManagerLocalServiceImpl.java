@@ -16,7 +16,6 @@ package com.liferay.data.migration.tool.service.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.data.migration.tool.model.EntityManager;
 import com.liferay.data.migration.tool.service.base.EntityManagerLocalServiceBaseImpl;
 
 /**
@@ -36,7 +35,8 @@ import com.liferay.data.migration.tool.service.base.EntityManagerLocalServiceBas
 @ProviderType
 public class EntityManagerLocalServiceImpl
 	extends EntityManagerLocalServiceBaseImpl {
-	/*
+
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. Always use {@link com.liferay.data.migration.tool.service.EntityManagerLocalServiceUtil} to access the entity manager local service.

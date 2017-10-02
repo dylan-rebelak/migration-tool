@@ -81,7 +81,9 @@ public class MigrateUserEntityService implements MigrationEntityService {
 	public void syncEntity(Object entity) {
 		User user = (User)entity;
 
-		_log.info("Migrated user: " + user.getFullName());
+		if (_log.isInfoEnabled()) {
+			_log.info("Migrated user: " + user.getFullName());
+		}
 	}
 
 	@Reference

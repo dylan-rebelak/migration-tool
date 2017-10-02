@@ -11,6 +11,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 package com.liferay.data.migration.tool.exception;
 
 import aQute.bnd.annotation.ProviderType;
@@ -21,20 +22,21 @@ import com.liferay.portal.kernel.exception.NoSuchModelException;
  * @author Dylan Rebelak
  */
 @ProviderType
-public class NoSuchMigrationManagerException extends NoSuchModelException {
+@SuppressWarnings("serial")
+public class NoSuchMigrationException extends NoSuchModelException {
 
-	public NoSuchMigrationManagerException() {
+	public NoSuchMigrationException() {
 	}
 
-	public NoSuchMigrationManagerException(String msg) {
+	public NoSuchMigrationException(String msg) {
 		super(msg);
 	}
 
-	public NoSuchMigrationManagerException(String msg, Throwable cause) {
+	public NoSuchMigrationException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
 
-	public NoSuchMigrationManagerException(Throwable cause) {
+	public NoSuchMigrationException(Throwable cause) {
 		super(cause);
 	}
 

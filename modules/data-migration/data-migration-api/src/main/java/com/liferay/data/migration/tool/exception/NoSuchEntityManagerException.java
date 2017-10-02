@@ -11,6 +11,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 package com.liferay.data.migration.tool.exception;
 
 import aQute.bnd.annotation.ProviderType;
@@ -21,6 +22,7 @@ import com.liferay.portal.kernel.exception.NoSuchModelException;
  * @author Dylan Rebelak
  */
 @ProviderType
+@SuppressWarnings("serial")
 public class NoSuchEntityManagerException extends NoSuchModelException {
 
 	public NoSuchEntityManagerException() {

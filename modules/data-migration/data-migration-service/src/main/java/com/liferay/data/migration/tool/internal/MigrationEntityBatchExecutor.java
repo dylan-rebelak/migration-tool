@@ -1,7 +1,7 @@
 package com.liferay.data.migration.tool.internal;
 
 import com.liferay.data.migration.tool.service.MigrationEntityService;
-import com.liferay.data.migration.tool.service.MigrationManagerLocalService;
+import com.liferay.data.migration.tool.service.MigrationLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -24,7 +24,7 @@ public class MigrationEntityBatchExecutor implements Runnable {
 
 		stopWatch.start();
 
-		long count = _migrationManagerLocalService.migrateEntityBatch(
+		long count = _migrationLocalService.migrateEntityBatch(
 			_entityService, _entityBatch);
 
 		if (_log.isDebugEnabled()) {
@@ -54,10 +54,10 @@ public class MigrationEntityBatchExecutor implements Runnable {
 		_count = count;
 	}
 
-	protected void setMigrationManagerLocalService(
-		MigrationManagerLocalService migrationManagerLocalService) {
+	protected void setMigrationLocalService(
+		MigrationLocalService migrationLocalService) {
 
-		_migrationManagerLocalService = migrationManagerLocalService;
+		_migrationLocalService = migrationLocalService;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
@@ -66,6 +66,6 @@ public class MigrationEntityBatchExecutor implements Runnable {
 	private AtomicLong _count;
 	private List<Object> _entityBatch;
 	private MigrationEntityService _entityService;
-	private MigrationManagerLocalService _migrationManagerLocalService;
+	private MigrationLocalService _migrationLocalService;
 
 }

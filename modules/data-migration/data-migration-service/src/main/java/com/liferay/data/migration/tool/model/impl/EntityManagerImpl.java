@@ -27,11 +27,13 @@ import aQute.bnd.annotation.ProviderType;
  */
 @ProviderType
 public class EntityManagerImpl extends EntityManagerBaseImpl {
-	/*
+
+	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never reference this class directly. All methods that expect a entity manager model instance should use the {@link com.liferay.data.migration.tool.model.EntityManager} interface instead.
 	 */
 	public EntityManagerImpl() {
 	}
+
 }

@@ -4,9 +4,16 @@
 	<author>Dylan Rebelak</author>
 	<namespace>SYNC</namespace>
 
-	<entity local-service="true" name="MigrationManager" remote-service="false">
+	<entity local-service="true" name="EntityManager" remote-service="false">
+		<column name="entityName" primary="true" type="String" />
 
-		<column name="managerId" primary="true" type="long" />
+		<!-- started: Time of last completed sync for this entity -->
+
+		<column name="lastSyncDate" type="Date" />
+	</entity>
+
+	<entity local-service="true" name="Migration" remote-service="false">
+		<column name="migrationId" primary="true" type="long" />
 
 		<!-- started: Time this run started -->
 
@@ -29,14 +36,5 @@
 		<order by="desc">
 			<order-column name="timeStarted" />
 		</order>
-	</entity>
-
-	<entity local-service="true" name="EntityManager" remote-service="false">
-
-		<column name="entityName" primary="true" type="String" />
-
-		<!-- started: Time of last completed sync for this entity -->
-
-		<column name="lastSyncDate" type="Date" />
 	</entity>
 </service-builder>

@@ -16,7 +16,7 @@ package com.liferay.data.migration.tool.model.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.data.migration.tool.model.MigrationManager;
+import com.liferay.data.migration.tool.model.Migration;
 
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
@@ -30,14 +30,14 @@ import java.io.ObjectOutput;
 import java.util.Date;
 
 /**
- * The cache model class for representing MigrationManager in entity cache.
+ * The cache model class for representing Migration in entity cache.
  *
  * @author Dylan Rebelak
- * @see MigrationManager
+ * @see Migration
  * @generated
  */
 @ProviderType
-public class MigrationManagerCacheModel implements CacheModel<MigrationManager>,
+public class MigrationCacheModel implements CacheModel<Migration>,
 	Externalizable {
 	@Override
 	public boolean equals(Object obj) {
@@ -45,13 +45,13 @@ public class MigrationManagerCacheModel implements CacheModel<MigrationManager>,
 			return true;
 		}
 
-		if (!(obj instanceof MigrationManagerCacheModel)) {
+		if (!(obj instanceof MigrationCacheModel)) {
 			return false;
 		}
 
-		MigrationManagerCacheModel migrationManagerCacheModel = (MigrationManagerCacheModel)obj;
+		MigrationCacheModel migrationCacheModel = (MigrationCacheModel)obj;
 
-		if (managerId == migrationManagerCacheModel.managerId) {
+		if (migrationId == migrationCacheModel.migrationId) {
 			return true;
 		}
 
@@ -60,15 +60,15 @@ public class MigrationManagerCacheModel implements CacheModel<MigrationManager>,
 
 	@Override
 	public int hashCode() {
-		return HashUtil.hash(0, managerId);
+		return HashUtil.hash(0, migrationId);
 	}
 
 	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(11);
 
-		sb.append("{managerId=");
-		sb.append(managerId);
+		sb.append("{migrationId=");
+		sb.append(migrationId);
 		sb.append(", timeStarted=");
 		sb.append(timeStarted);
 		sb.append(", timeCompleted=");
@@ -83,42 +83,42 @@ public class MigrationManagerCacheModel implements CacheModel<MigrationManager>,
 	}
 
 	@Override
-	public MigrationManager toEntityModel() {
-		MigrationManagerImpl migrationManagerImpl = new MigrationManagerImpl();
+	public Migration toEntityModel() {
+		MigrationImpl migrationImpl = new MigrationImpl();
 
-		migrationManagerImpl.setManagerId(managerId);
+		migrationImpl.setMigrationId(migrationId);
 
 		if (timeStarted == Long.MIN_VALUE) {
-			migrationManagerImpl.setTimeStarted(null);
+			migrationImpl.setTimeStarted(null);
 		}
 		else {
-			migrationManagerImpl.setTimeStarted(new Date(timeStarted));
+			migrationImpl.setTimeStarted(new Date(timeStarted));
 		}
 
 		if (timeCompleted == Long.MIN_VALUE) {
-			migrationManagerImpl.setTimeCompleted(null);
+			migrationImpl.setTimeCompleted(null);
 		}
 		else {
-			migrationManagerImpl.setTimeCompleted(new Date(timeCompleted));
+			migrationImpl.setTimeCompleted(new Date(timeCompleted));
 		}
 
 		if (fromDate == Long.MIN_VALUE) {
-			migrationManagerImpl.setFromDate(null);
+			migrationImpl.setFromDate(null);
 		}
 		else {
-			migrationManagerImpl.setFromDate(new Date(fromDate));
+			migrationImpl.setFromDate(new Date(fromDate));
 		}
 
-		migrationManagerImpl.setRecordsSynced(recordsSynced);
+		migrationImpl.setRecordsSynced(recordsSynced);
 
-		migrationManagerImpl.resetOriginalValues();
+		migrationImpl.resetOriginalValues();
 
-		return migrationManagerImpl;
+		return migrationImpl;
 	}
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
-		managerId = objectInput.readLong();
+		migrationId = objectInput.readLong();
 		timeStarted = objectInput.readLong();
 		timeCompleted = objectInput.readLong();
 		fromDate = objectInput.readLong();
@@ -129,7 +129,7 @@ public class MigrationManagerCacheModel implements CacheModel<MigrationManager>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
-		objectOutput.writeLong(managerId);
+		objectOutput.writeLong(migrationId);
 		objectOutput.writeLong(timeStarted);
 		objectOutput.writeLong(timeCompleted);
 		objectOutput.writeLong(fromDate);
@@ -137,7 +137,7 @@ public class MigrationManagerCacheModel implements CacheModel<MigrationManager>,
 		objectOutput.writeLong(recordsSynced);
 	}
 
-	public long managerId;
+	public long migrationId;
 	public long timeStarted;
 	public long timeCompleted;
 	public long fromDate;

@@ -29,11 +29,11 @@ import java.util.List;
  * @generated
  */
 @ProviderType
-public class MigrationManagerSoap implements Serializable {
-	public static MigrationManagerSoap toSoapModel(MigrationManager model) {
-		MigrationManagerSoap soapModel = new MigrationManagerSoap();
+public class MigrationSoap implements Serializable {
+	public static MigrationSoap toSoapModel(Migration model) {
+		MigrationSoap soapModel = new MigrationSoap();
 
-		soapModel.setManagerId(model.getManagerId());
+		soapModel.setMigrationId(model.getMigrationId());
 		soapModel.setTimeStarted(model.getTimeStarted());
 		soapModel.setTimeCompleted(model.getTimeCompleted());
 		soapModel.setFromDate(model.getFromDate());
@@ -42,8 +42,8 @@ public class MigrationManagerSoap implements Serializable {
 		return soapModel;
 	}
 
-	public static MigrationManagerSoap[] toSoapModels(MigrationManager[] models) {
-		MigrationManagerSoap[] soapModels = new MigrationManagerSoap[models.length];
+	public static MigrationSoap[] toSoapModels(Migration[] models) {
+		MigrationSoap[] soapModels = new MigrationSoap[models.length];
 
 		for (int i = 0; i < models.length; i++) {
 			soapModels[i] = toSoapModel(models[i]);
@@ -52,15 +52,14 @@ public class MigrationManagerSoap implements Serializable {
 		return soapModels;
 	}
 
-	public static MigrationManagerSoap[][] toSoapModels(
-		MigrationManager[][] models) {
-		MigrationManagerSoap[][] soapModels = null;
+	public static MigrationSoap[][] toSoapModels(Migration[][] models) {
+		MigrationSoap[][] soapModels = null;
 
 		if (models.length > 0) {
-			soapModels = new MigrationManagerSoap[models.length][models[0].length];
+			soapModels = new MigrationSoap[models.length][models[0].length];
 		}
 		else {
-			soapModels = new MigrationManagerSoap[0][0];
+			soapModels = new MigrationSoap[0][0];
 		}
 
 		for (int i = 0; i < models.length; i++) {
@@ -70,34 +69,33 @@ public class MigrationManagerSoap implements Serializable {
 		return soapModels;
 	}
 
-	public static MigrationManagerSoap[] toSoapModels(
-		List<MigrationManager> models) {
-		List<MigrationManagerSoap> soapModels = new ArrayList<MigrationManagerSoap>(models.size());
+	public static MigrationSoap[] toSoapModels(List<Migration> models) {
+		List<MigrationSoap> soapModels = new ArrayList<MigrationSoap>(models.size());
 
-		for (MigrationManager model : models) {
+		for (Migration model : models) {
 			soapModels.add(toSoapModel(model));
 		}
 
-		return soapModels.toArray(new MigrationManagerSoap[soapModels.size()]);
+		return soapModels.toArray(new MigrationSoap[soapModels.size()]);
 	}
 
-	public MigrationManagerSoap() {
+	public MigrationSoap() {
 	}
 
 	public long getPrimaryKey() {
-		return _managerId;
+		return _migrationId;
 	}
 
 	public void setPrimaryKey(long pk) {
-		setManagerId(pk);
+		setMigrationId(pk);
 	}
 
-	public long getManagerId() {
-		return _managerId;
+	public long getMigrationId() {
+		return _migrationId;
 	}
 
-	public void setManagerId(long managerId) {
-		_managerId = managerId;
+	public void setMigrationId(long migrationId) {
+		_migrationId = migrationId;
 	}
 
 	public Date getTimeStarted() {
@@ -132,7 +130,7 @@ public class MigrationManagerSoap implements Serializable {
 		_recordsSynced = recordsSynced;
 	}
 
-	private long _managerId;
+	private long _migrationId;
 	private Date _timeStarted;
 	private Date _timeCompleted;
 	private Date _fromDate;

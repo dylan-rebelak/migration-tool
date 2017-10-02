@@ -18,10 +18,10 @@ import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.data.migration.tool.internal.MigrationTaskImpl;
 import com.liferay.data.migration.tool.model.EntityManager;
-import com.liferay.data.migration.tool.model.MigrationManager;
+import com.liferay.data.migration.tool.model.Migration;
 import com.liferay.data.migration.tool.service.MigrationEntityService;
 import com.liferay.data.migration.tool.service.MigrationTask;
-import com.liferay.data.migration.tool.service.base.MigrationManagerLocalServiceBaseImpl;
+import com.liferay.data.migration.tool.service.base.MigrationLocalServiceBaseImpl;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.transaction.Propagation;
@@ -35,22 +35,21 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
- * The implementation of the migration manager local service.
+ * The implementation of the migration local service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link com.liferay.data.migration.tool.service.MigrationManagerLocalService} interface.
+ * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link com.liferay.data.migration.tool.service.MigrationLocalService} interface.
  *
  * <p>
  * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
  * </p>
  *
  * @author Dylan Rebelak
- * @see MigrationManagerLocalServiceBaseImpl
- * @see com.liferay.data.migration.tool.service.MigrationManagerLocalServiceUtil
+ * @see MigrationLocalServiceBaseImpl
+ * @see com.liferay.data.migration.tool.service.MigrationLocalServiceUtil
  */
 @ProviderType
-public class MigrationManagerLocalServiceImpl
-	extends MigrationManagerLocalServiceBaseImpl {
+public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public long migrateEntityBatch(
@@ -82,23 +81,22 @@ public class MigrationManagerLocalServiceImpl
 	public void recordMigrationStatistics(
 		Date fromDate, Date timeStarted, long count) {
 
-		long syncId = counterLocalService.increment(
-			MigrationManager.class.getName());
+		long syncId = counterLocalService.increment(Migration.class.getName());
 
-		MigrationManager manager = migrationManagerPersistence.create(syncId);
+		Migration migration = migrationPersistence.create(syncId);
 
-		manager.setTimeCompleted(new Date());
-		manager.setFromDate(fromDate);
-		manager.setRecordsSynced(count);
-		manager.setTimeStarted(timeStarted);
+		migration.setTimeCompleted(new Date());
+		migration.setFromDate(fromDate);
+		migration.setRecordsSynced(count);
+		migration.setTimeStarted(timeStarted);
 
-		addMigrationManager(manager);
+		addMigration(migration);
 	}
 
 	/**
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never reference this class directly. Always use {@link com.liferay.data.migration.tool.service.MigrationManagerLocalServiceUtil} to access the migration manager local service.
+	 * Never reference this class directly. Always use {@link com.liferay.data.migration.tool.service.MigrationLocalServiceUtil} to access the migration local service.
 	 */
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -113,14 +111,16 @@ public class MigrationManagerLocalServiceImpl
 				entityManagerLocalService.fetchEntityManager(entityName);
 
 			if (entityManager == null) {
-				entityManager =
-					entityManagerLocalService.createEntityManager(entityName);
+				entityManager = entityManagerLocalService.createEntityManager(
+					entityName);
+
 				entityManager.setLastSyncDate(new Date(0));
 			}
 
 			Date fromDate = entityManager.getLastSyncDate();
 
-			count.addAndGet(doRunEntityService(entityService, fromDate, startDate));
+			count.addAndGet(
+				doRunEntityService(entityService, fromDate, startDate));
 
 			entityManager.setLastSyncDate(startDate);
 			entityManagerLocalService.updateEntityManager(entityManager);
@@ -137,13 +137,14 @@ public class MigrationManagerLocalServiceImpl
 
 		MigrationTaskImpl task = new MigrationTaskImpl(entityService);
 
-		task.setMigrationManagerLocalService(migrationManagerLocalService);
+		task.setMigrationLocalService(migrationLocalService);
 
 		return task;
 	}
 
 	protected long doRunEntityService(
-		MigrationEntityService entityService, final Date fromDate, final Date now) {
+		MigrationEntityService entityService, final Date fromDate,
+		final Date now) {
 
 		String entityName = entityService.getEntityName();
 
@@ -188,6 +189,6 @@ public class MigrationManagerLocalServiceImpl
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		MigrationManagerLocalServiceImpl.class);
+		MigrationLocalServiceImpl.class);
 
 }

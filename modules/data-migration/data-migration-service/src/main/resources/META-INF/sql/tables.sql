@@ -3,8 +3,8 @@ create table SYNC_EntityManager (
 	lastSyncDate DATE null
 );
 
-create table SYNC_MigrationManager (
-	managerId LONG not null primary key,
+create table SYNC_Migration (
+	migrationId LONG not null primary key,
 	timeStarted DATE null,
 	timeCompleted DATE null,
 	fromDate DATE null,

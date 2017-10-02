@@ -21,26 +21,26 @@ import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.util.Accessor;
 
 /**
- * The extended model interface for the MigrationManager service. Represents a row in the &quot;SYNC_MigrationManager&quot; database table, with each column mapped to a property of this class.
+ * The extended model interface for the Migration service. Represents a row in the &quot;SYNC_Migration&quot; database table, with each column mapped to a property of this class.
  *
  * @author Dylan Rebelak
- * @see MigrationManagerModel
- * @see com.liferay.data.migration.tool.model.impl.MigrationManagerImpl
- * @see com.liferay.data.migration.tool.model.impl.MigrationManagerModelImpl
+ * @see MigrationModel
+ * @see com.liferay.data.migration.tool.model.impl.MigrationImpl
+ * @see com.liferay.data.migration.tool.model.impl.MigrationModelImpl
  * @generated
  */
-@ImplementationClassName("com.liferay.data.migration.tool.model.impl.MigrationManagerImpl")
+@ImplementationClassName("com.liferay.data.migration.tool.model.impl.MigrationImpl")
 @ProviderType
-public interface MigrationManager extends MigrationManagerModel, PersistedModel {
+public interface Migration extends MigrationModel, PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify this interface directly. Add methods to {@link com.liferay.data.migration.tool.model.impl.MigrationManagerImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
+	 * Never modify this interface directly. Add methods to {@link com.liferay.data.migration.tool.model.impl.MigrationImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
-	public static final Accessor<MigrationManager, Long> MANAGER_ID_ACCESSOR = new Accessor<MigrationManager, Long>() {
+	public static final Accessor<Migration, Long> MIGRATION_ID_ACCESSOR = new Accessor<Migration, Long>() {
 			@Override
-			public Long get(MigrationManager migrationManager) {
-				return migrationManager.getManagerId();
+			public Long get(Migration migration) {
+				return migration.getMigrationId();
 			}
 
 			@Override
@@ -49,8 +49,8 @@ public interface MigrationManager extends MigrationManagerModel, PersistedModel 
 			}
 
 			@Override
-			public Class<MigrationManager> getTypeClass() {
-				return MigrationManager.class;
+			public Class<Migration> getTypeClass() {
+				return Migration.class;
 			}
 		};
 }
