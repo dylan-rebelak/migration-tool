@@ -1,4 +1,4 @@
-package com.liferay.data.migration.tool.internal;
+package com.lliferay.data.migration.tool.internal.scheduler;
 
 import com.liferay.data.migration.tool.service.MigrationHandler;
 import com.liferay.portal.kernel.lock.Lock;
