@@ -65,6 +65,18 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 		addMigration(migration);
 	}
 
+	public Migration getLastMigration() {
+		Migration lastMigration = null;
+
+		List<Migration> migrations = getMigrations(0, 1);
+
+		if (!migrations.isEmpty()) {
+			lastMigration = migrations.get(0);
+		}
+
+		return lastMigration;
+	}
+
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public long migrateEntityBatch(
 		MigrationEntityService entityService, List<Object> batch) {

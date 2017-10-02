@@ -27,15 +27,7 @@ public class MigrationHandlerImpl implements MigrationHandler {
 
 	@Override
 	public void runMigration() {
-		Date fromDate = new Date(0);
-
-		List<Migration> migrations = _migrationLocalService.getMigrations(0, 1);
-
-		if (migrations.isEmpty()) {
-			fromDate = migrations.get(0).getTimeStarted();
-		}
-
-		runMigration(fromDate);
+		runMigration(_getLastMigrationStartTime());
 	}
 
 	@Override
@@ -67,6 +59,18 @@ public class MigrationHandlerImpl implements MigrationHandler {
 		_migrationEntityServices.remove(entityService);
 	}
 
+	private Date _getLastMigrationStartTime() {
+		Date startTime = _EPOCH;
+
+		Migration lastMigration = _migrationLocalService.getLastMigration();
+
+		if (lastMigration != null) {
+			startTime = lastMigration.getTimeStarted();
+		}
+
+		return startTime;
+	}
+
 	private long _runEntityServices(final Date startDate) {
 		final AtomicLong count = new AtomicLong();
 
@@ -80,6 +84,8 @@ public class MigrationHandlerImpl implements MigrationHandler {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		MigrationHandlerImpl.class);
+
+	private static final Date _EPOCH = new Date(0);
 
 	@Reference
 	private GroupLocalService _groupLocalService;
