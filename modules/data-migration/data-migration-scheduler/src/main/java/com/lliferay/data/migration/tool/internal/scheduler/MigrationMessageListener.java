@@ -29,8 +29,11 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Dylan Rebelak
  */
-@Component(immediate = true, service = MigrationScheduledListener.class)
-public class MigrationScheduledListener
+@Component(immediate = true, service = MigrationMessageListener.class)
+/* TODO: extend BaseMessageListerner instead
+ * Refer to https://web.liferay.com/web/user.26526/blog/-/blogs/liferay-7-ce-liferay-dxp-scheduled-tasks for details
+ */
+public class MigrationMessageListener
 	extends BaseSchedulerEntryMessageListener {
 
 	@Activate
@@ -82,7 +85,7 @@ public class MigrationScheduledListener
 	protected void doReceive(Message message) throws Exception {
 		Lock lock = null;
 
-		String className = MigrationScheduledListener.class.getName();
+		String className = MigrationMessageListener.class.getName();
 
 		String user = "Scheduled Task";
 
@@ -124,7 +127,7 @@ public class MigrationScheduledListener
 	private static final String _DEFAULT_CRON_EXPRESSION = "0 0 0 * * ?";
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		MigrationScheduledListener.class);
+		MigrationMessageListener.class);
 
 	private volatile boolean _initialized;
 
