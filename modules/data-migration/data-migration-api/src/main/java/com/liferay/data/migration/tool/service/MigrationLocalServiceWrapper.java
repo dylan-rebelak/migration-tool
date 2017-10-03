@@ -33,6 +33,14 @@ public class MigrationLocalServiceWrapper implements MigrationLocalService,
 		_migrationLocalService = migrationLocalService;
 	}
 
+	@Override
+	public com.liferay.data.migration.tool.model.EntityMigration fetchLastOrCreateNewEntityMigration(
+		com.liferay.data.migration.tool.model.Migration migration,
+		java.lang.String entityName) {
+		return _migrationLocalService.fetchLastOrCreateNewEntityMigration(migration,
+			entityName);
+	}
+
 	/**
 	* Adds the migration to the database. Also notifies the appropriate model listeners.
 	*
@@ -43,6 +51,12 @@ public class MigrationLocalServiceWrapper implements MigrationLocalService,
 	public com.liferay.data.migration.tool.model.Migration addMigration(
 		com.liferay.data.migration.tool.model.Migration migration) {
 		return _migrationLocalService.addMigration(migration);
+	}
+
+	@Override
+	public com.liferay.data.migration.tool.model.Migration addMigration(
+		java.util.Date start) {
+		return _migrationLocalService.addMigration(start);
 	}
 
 	/**
@@ -87,11 +101,6 @@ public class MigrationLocalServiceWrapper implements MigrationLocalService,
 	public com.liferay.data.migration.tool.model.Migration fetchMigration(
 		long migrationId) {
 		return _migrationLocalService.fetchMigration(migrationId);
-	}
-
-	@Override
-	public com.liferay.data.migration.tool.model.Migration getLastMigration() {
-		return _migrationLocalService.getLastMigration();
 	}
 
 	/**
@@ -243,19 +252,6 @@ public class MigrationLocalServiceWrapper implements MigrationLocalService,
 	}
 
 	/**
-	* NOTE FOR DEVELOPERS:
-	*
-	* Never reference this class directly. Always use {@link MigrationLocalServiceUtil} to access the migration local service.
-	*/
-	@Override
-	public java.util.concurrent.atomic.AtomicLong migrateEntities(
-		EntityService entityService, java.util.Date startDate,
-		java.util.concurrent.atomic.AtomicLong count) {
-		return _migrationLocalService.migrateEntities(entityService,
-			startDate, count);
-	}
-
-	/**
 	* Returns the number of rows matching the dynamic query.
 	*
 	* @param dynamicQuery the dynamic query
@@ -282,15 +278,25 @@ public class MigrationLocalServiceWrapper implements MigrationLocalService,
 	}
 
 	@Override
+	public long getLastMigrationId() {
+		return _migrationLocalService.getLastMigrationId();
+	}
+
+	@Override
 	public long migrateEntityBatch(EntityService entityService,
 		java.util.List<java.lang.Object> batch) {
 		return _migrationLocalService.migrateEntityBatch(entityService, batch);
 	}
 
+	/**
+	* NOTE FOR DEVELOPERS:
+	*
+	* Never reference this class directly. Always use {@link MigrationLocalServiceUtil} to access the migration local service.
+	*/
 	@Override
-	public void addMigration(java.util.Date fromDate,
-		java.util.Date timeStarted, long count) {
-		_migrationLocalService.addMigration(fromDate, timeStarted, count);
+	public void migrateEntities(EntityService entityService,
+		com.liferay.data.migration.tool.model.Migration migration) {
+		_migrationLocalService.migrateEntities(entityService, migration);
 	}
 
 	@Override

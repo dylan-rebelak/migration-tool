@@ -5,12 +5,12 @@ import java.util.Date;
 /**
  * @author Dylan Rebelak
  */
-public interface MigrationTask {
+public interface EntityMigrationTask {
 
 	public void blockUntilDone();
 
-	public long getImportCount();
+	public long getMigrationCount();
 
-	public void run(Date fromDate, Date now);
+	public void run(Date from, Date to);
 
 }

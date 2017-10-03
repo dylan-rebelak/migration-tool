@@ -2,21 +2,24 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false" default-lazy="false">
-	<import class="com.liferay.data.migration.tool.model.EntityManager" />
+	<import class="com.liferay.data.migration.tool.model.EntityMigration" />
 	<import class="com.liferay.data.migration.tool.model.Migration" />
-	<class name="com.liferay.data.migration.tool.model.impl.EntityManagerImpl" table="SYNC_EntityManager">
-		<id name="entityName" type="java.lang.String">
+	<class name="com.liferay.data.migration.tool.model.impl.EntityMigrationImpl" table="MIG_EntityMigration">
+		<id name="entityMigrationId" type="long">
 			<generator class="assigned" />
 		</id>
-		<property name="lastSyncDate" type="org.hibernate.type.TimestampType" />
+		<property name="migrationId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="entityName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property column="start_" name="start" type="org.hibernate.type.TimestampType" />
+		<property column="end_" name="end" type="org.hibernate.type.TimestampType" />
+		<property name="count" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="lastCompletion" type="org.hibernate.type.TimestampType" />
 	</class>
-	<class name="com.liferay.data.migration.tool.model.impl.MigrationImpl" table="SYNC_Migration">
+	<class name="com.liferay.data.migration.tool.model.impl.MigrationImpl" table="MIG_Migration">
 		<id name="migrationId" type="long">
 			<generator class="assigned" />
 		</id>
-		<property name="fromDate" type="org.hibernate.type.TimestampType" />
-		<property name="timeStarted" type="org.hibernate.type.TimestampType" />
-		<property name="timeCompleted" type="org.hibernate.type.TimestampType" />
-		<property name="recordsSynced" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property column="start_" name="start" type="org.hibernate.type.TimestampType" />
+		<property column="end_" name="end" type="org.hibernate.type.TimestampType" />
 	</class>
 </hibernate-mapping>

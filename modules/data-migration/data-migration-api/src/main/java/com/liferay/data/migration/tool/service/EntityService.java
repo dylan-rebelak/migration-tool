@@ -33,7 +33,7 @@ public interface EntityService {
 	public abstract long dynamicQueryCount(DynamicQuery query);
 
 	public List<Object> getEntitiesModifiedSinceDate(
-		Date sinceDate, Date now, int start, int end);
+		Date from, Date to, int batchStart, int batchEnd);
 
 	public default String getEntityName() {
 		Class<? extends EntityService> localServiceClass = this.getClass();

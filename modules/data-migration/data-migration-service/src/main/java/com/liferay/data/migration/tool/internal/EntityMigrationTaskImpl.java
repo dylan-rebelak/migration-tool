@@ -4,9 +4,9 @@ import static com.liferay.data.migration.tool.internal.MigrationConstants.MAX_BA
 import static com.liferay.data.migration.tool.internal.MigrationConstants.SYNC_REC_COUNT;
 import static com.liferay.data.migration.tool.internal.MigrationConstants.THREAD_POOL_SIZE;
 
+import com.liferay.data.migration.tool.service.EntityMigrationTask;
 import com.liferay.data.migration.tool.service.EntityService;
 import com.liferay.data.migration.tool.service.MigrationLocalService;
-import com.liferay.data.migration.tool.service.MigrationTask;
 import com.liferay.portal.kernel.util.ListUtil;
 
 import java.util.Date;
@@ -20,15 +20,15 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @author Dylan Rebelak
  */
-public class MigrationTaskImpl implements MigrationTask {
+public class EntityMigrationTaskImpl implements EntityMigrationTask {
 
-	public MigrationTaskImpl(EntityService entityService) {
+	public EntityMigrationTaskImpl(EntityService entityService) {
 		this(
 			entityService, SYNC_REC_COUNT, THREAD_POOL_SIZE,
 			MAX_BATCH_QUEUE_SIZE);
 	}
 
-	public MigrationTaskImpl(
+	public EntityMigrationTaskImpl(
 		EntityService entityService, int batchSize, int threadPoolSize,
 		int maxQueue) {
 
@@ -59,17 +59,17 @@ public class MigrationTaskImpl implements MigrationTask {
 	}
 
 	@Override
-	public long getImportCount() {
+	public long getMigrationCount() {
 		return _count.get();
 	}
 
 	@Override
-	public void run(Date fromDate, Date now) {
+	public void run(Date from, Date to) {
 		int start = 0;
 
 		while (true) {
 			List<Object> batch = _entityService.getEntitiesModifiedSinceDate(
-				fromDate, now, start, start + _batchSize);
+				from, to, start, start + _batchSize);
 
 			start += _batchSize;
 
@@ -89,13 +89,13 @@ public class MigrationTaskImpl implements MigrationTask {
 		_migrationLocalService = migrationLocalService;
 	}
 
-	private MigrationEntityBatchExecutor _createSyncJob(List<Object> batch) {
-		MigrationEntityBatchExecutor batchSyncExecutor =
-			new MigrationEntityBatchExecutor(_entityService, batch, _count);
+	private EntityMigrationBatchExecutor _createSyncJob(List<Object> batch) {
+		EntityMigrationBatchExecutor batchExecutor =
+			new EntityMigrationBatchExecutor(_entityService, batch, _count);
 
-		batchSyncExecutor.setMigrationLocalService(_migrationLocalService);
+		batchExecutor.setMigrationLocalService(_migrationLocalService);
 
-		return batchSyncExecutor;
+		return batchExecutor;
 	}
 
 	private static final int _DEFAULT_KEEP_ALIVE_TIME = 60000;

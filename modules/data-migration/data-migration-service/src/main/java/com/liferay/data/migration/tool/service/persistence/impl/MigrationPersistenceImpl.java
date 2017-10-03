@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.spring.extender.service.ServiceReference;
@@ -311,10 +312,8 @@ public class MigrationPersistenceImpl extends BasePersistenceImpl<Migration>
 		migrationImpl.setPrimaryKey(migration.getPrimaryKey());
 
 		migrationImpl.setMigrationId(migration.getMigrationId());
-		migrationImpl.setFromDate(migration.getFromDate());
-		migrationImpl.setTimeStarted(migration.getTimeStarted());
-		migrationImpl.setTimeCompleted(migration.getTimeCompleted());
-		migrationImpl.setRecordsSynced(migration.getRecordsSynced());
+		migrationImpl.setStart(migration.getStart());
+		migrationImpl.setEnd(migration.getEnd());
 
 		return migrationImpl;
 	}
@@ -701,6 +700,11 @@ public class MigrationPersistenceImpl extends BasePersistenceImpl<Migration>
 	}
 
 	@Override
+	public Set<String> getBadColumnNames() {
+		return _badColumnNames;
+	}
+
+	@Override
 	protected Map<String, Integer> getTableColumnsMap() {
 		return MigrationModelImpl.TABLE_COLUMNS_MAP;
 	}
@@ -728,4 +732,7 @@ public class MigrationPersistenceImpl extends BasePersistenceImpl<Migration>
 	private static final String _ORDER_BY_ENTITY_ALIAS = "migration.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Migration exists with the primary key ";
 	private static final Log _log = LogFactoryUtil.getLog(MigrationPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+				"start", "end"
+			});
 }

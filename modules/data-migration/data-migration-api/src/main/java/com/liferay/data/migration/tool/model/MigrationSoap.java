@@ -34,10 +34,8 @@ public class MigrationSoap implements Serializable {
 		MigrationSoap soapModel = new MigrationSoap();
 
 		soapModel.setMigrationId(model.getMigrationId());
-		soapModel.setFromDate(model.getFromDate());
-		soapModel.setTimeStarted(model.getTimeStarted());
-		soapModel.setTimeCompleted(model.getTimeCompleted());
-		soapModel.setRecordsSynced(model.getRecordsSynced());
+		soapModel.setStart(model.getStart());
+		soapModel.setEnd(model.getEnd());
 
 		return soapModel;
 	}
@@ -98,41 +96,23 @@ public class MigrationSoap implements Serializable {
 		_migrationId = migrationId;
 	}
 
-	public Date getFromDate() {
-		return _fromDate;
+	public Date getStart() {
+		return _start;
 	}
 
-	public void setFromDate(Date fromDate) {
-		_fromDate = fromDate;
+	public void setStart(Date start) {
+		_start = start;
 	}
 
-	public Date getTimeStarted() {
-		return _timeStarted;
+	public Date getEnd() {
+		return _end;
 	}
 
-	public void setTimeStarted(Date timeStarted) {
-		_timeStarted = timeStarted;
-	}
-
-	public Date getTimeCompleted() {
-		return _timeCompleted;
-	}
-
-	public void setTimeCompleted(Date timeCompleted) {
-		_timeCompleted = timeCompleted;
-	}
-
-	public long getRecordsSynced() {
-		return _recordsSynced;
-	}
-
-	public void setRecordsSynced(long recordsSynced) {
-		_recordsSynced = recordsSynced;
+	public void setEnd(Date end) {
+		_end = end;
 	}
 
 	private long _migrationId;
-	private Date _fromDate;
-	private Date _timeStarted;
-	private Date _timeCompleted;
-	private long _recordsSynced;
+	private Date _start;
+	private Date _end;
 }

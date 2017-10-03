@@ -122,13 +122,9 @@ public class MigrationPersistenceTest {
 
 		Migration newMigration = _persistence.create(pk);
 
-		newMigration.setFromDate(RandomTestUtil.nextDate());
+		newMigration.setStart(RandomTestUtil.nextDate());
 
-		newMigration.setTimeStarted(RandomTestUtil.nextDate());
-
-		newMigration.setTimeCompleted(RandomTestUtil.nextDate());
-
-		newMigration.setRecordsSynced(RandomTestUtil.nextLong());
+		newMigration.setEnd(RandomTestUtil.nextDate());
 
 		_migrations.add(_persistence.update(newMigration));
 
@@ -136,17 +132,10 @@ public class MigrationPersistenceTest {
 
 		Assert.assertEquals(existingMigration.getMigrationId(),
 			newMigration.getMigrationId());
-		Assert.assertEquals(Time.getShortTimestamp(
-				existingMigration.getFromDate()),
-			Time.getShortTimestamp(newMigration.getFromDate()));
-		Assert.assertEquals(Time.getShortTimestamp(
-				existingMigration.getTimeStarted()),
-			Time.getShortTimestamp(newMigration.getTimeStarted()));
-		Assert.assertEquals(Time.getShortTimestamp(
-				existingMigration.getTimeCompleted()),
-			Time.getShortTimestamp(newMigration.getTimeCompleted()));
-		Assert.assertEquals(existingMigration.getRecordsSynced(),
-			newMigration.getRecordsSynced());
+		Assert.assertEquals(Time.getShortTimestamp(existingMigration.getStart()),
+			Time.getShortTimestamp(newMigration.getStart()));
+		Assert.assertEquals(Time.getShortTimestamp(existingMigration.getEnd()),
+			Time.getShortTimestamp(newMigration.getEnd()));
 	}
 
 	@Test
@@ -172,9 +161,8 @@ public class MigrationPersistenceTest {
 	}
 
 	protected OrderByComparator<Migration> getOrderByComparator() {
-		return OrderByComparatorFactoryUtil.create("SYNC_Migration",
-			"migrationId", true, "fromDate", true, "timeStarted", true,
-			"timeCompleted", true, "recordsSynced", true);
+		return OrderByComparatorFactoryUtil.create("MIG_Migration",
+			"migrationId", true, "start", true, "end", true);
 	}
 
 	@Test
@@ -374,13 +362,9 @@ public class MigrationPersistenceTest {
 
 		Migration migration = _persistence.create(pk);
 
-		migration.setFromDate(RandomTestUtil.nextDate());
+		migration.setStart(RandomTestUtil.nextDate());
 
-		migration.setTimeStarted(RandomTestUtil.nextDate());
-
-		migration.setTimeCompleted(RandomTestUtil.nextDate());
-
-		migration.setRecordsSynced(RandomTestUtil.nextLong());
+		migration.setEnd(RandomTestUtil.nextDate());
 
 		_migrations.add(_persistence.update(migration));
 

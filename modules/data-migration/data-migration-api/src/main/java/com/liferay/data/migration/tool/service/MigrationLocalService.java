@@ -16,6 +16,7 @@ package com.liferay.data.migration.tool.service;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.data.migration.tool.model.EntityMigration;
 import com.liferay.data.migration.tool.model.Migration;
 
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
@@ -38,7 +39,6 @@ import java.io.Serializable;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Provides the local service interface for Migration. Methods of this
@@ -62,6 +62,9 @@ public interface MigrationLocalService extends BaseLocalService,
 	 *
 	 * Never modify or reference this interface directly. Always use {@link MigrationLocalServiceUtil} to access the migration local service. Add custom service methods to {@link com.liferay.data.migration.tool.service.impl.MigrationLocalServiceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public EntityMigration fetchLastOrCreateNewEntityMigration(
+		Migration migration, java.lang.String entityName);
 
 	/**
 	* Adds the migration to the database. Also notifies the appropriate model listeners.
@@ -71,6 +74,8 @@ public interface MigrationLocalService extends BaseLocalService,
 	*/
 	@Indexable(type = IndexableType.REINDEX)
 	public Migration addMigration(Migration migration);
+
+	public Migration addMigration(Date start);
 
 	/**
 	* Creates a new migration with the primary key. Does not add the migration to the database.
@@ -102,9 +107,6 @@ public interface MigrationLocalService extends BaseLocalService,
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Migration fetchMigration(long migrationId);
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public Migration getLastMigration();
 
 	/**
 	* Returns the migration with the primary key.
@@ -214,15 +216,6 @@ public interface MigrationLocalService extends BaseLocalService,
 	public List<Migration> getMigrations(int start, int end);
 
 	/**
-	* NOTE FOR DEVELOPERS:
-	*
-	* Never reference this class directly. Always use {@link MigrationLocalServiceUtil} to access the migration local service.
-	*/
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public AtomicLong migrateEntities(EntityService entityService,
-		Date startDate, AtomicLong count);
-
-	/**
 	* Returns the number of rows matching the dynamic query.
 	*
 	* @param dynamicQuery the dynamic query
@@ -240,9 +233,18 @@ public interface MigrationLocalService extends BaseLocalService,
 	public long dynamicQueryCount(DynamicQuery dynamicQuery,
 		Projection projection);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public long getLastMigrationId();
+
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public long migrateEntityBatch(EntityService entityService,
 		List<java.lang.Object> batch);
 
-	public void addMigration(Date fromDate, Date timeStarted, long count);
+	/**
+	* NOTE FOR DEVELOPERS:
+	*
+	* Never reference this class directly. Always use {@link MigrationLocalServiceUtil} to access the migration local service.
+	*/
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void migrateEntities(EntityService entityService, Migration migration);
 }

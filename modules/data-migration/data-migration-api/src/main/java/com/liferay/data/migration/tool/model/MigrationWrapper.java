@@ -58,10 +58,8 @@ public class MigrationWrapper implements Migration, ModelWrapper<Migration> {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("migrationId", getMigrationId());
-		attributes.put("fromDate", getFromDate());
-		attributes.put("timeStarted", getTimeStarted());
-		attributes.put("timeCompleted", getTimeCompleted());
-		attributes.put("recordsSynced", getRecordsSynced());
+		attributes.put("start", getStart());
+		attributes.put("end", getEnd());
 
 		return attributes;
 	}
@@ -74,28 +72,16 @@ public class MigrationWrapper implements Migration, ModelWrapper<Migration> {
 			setMigrationId(migrationId);
 		}
 
-		Date fromDate = (Date)attributes.get("fromDate");
+		Date start = (Date)attributes.get("start");
 
-		if (fromDate != null) {
-			setFromDate(fromDate);
+		if (start != null) {
+			setStart(start);
 		}
 
-		Date timeStarted = (Date)attributes.get("timeStarted");
+		Date end = (Date)attributes.get("end");
 
-		if (timeStarted != null) {
-			setTimeStarted(timeStarted);
-		}
-
-		Date timeCompleted = (Date)attributes.get("timeCompleted");
-
-		if (timeCompleted != null) {
-			setTimeCompleted(timeCompleted);
-		}
-
-		Long recordsSynced = (Long)attributes.get("recordsSynced");
-
-		if (recordsSynced != null) {
-			setRecordsSynced(recordsSynced);
+		if (end != null) {
+			setEnd(end);
 		}
 	}
 
@@ -165,33 +151,23 @@ public class MigrationWrapper implements Migration, ModelWrapper<Migration> {
 	}
 
 	/**
-	* Returns the from date of this migration.
+	* Returns the end of this migration.
 	*
-	* @return the from date of this migration
+	* @return the end of this migration
 	*/
 	@Override
-	public Date getFromDate() {
-		return _migration.getFromDate();
+	public Date getEnd() {
+		return _migration.getEnd();
 	}
 
 	/**
-	* Returns the time completed of this migration.
+	* Returns the start of this migration.
 	*
-	* @return the time completed of this migration
+	* @return the start of this migration
 	*/
 	@Override
-	public Date getTimeCompleted() {
-		return _migration.getTimeCompleted();
-	}
-
-	/**
-	* Returns the time started of this migration.
-	*
-	* @return the time started of this migration
-	*/
-	@Override
-	public Date getTimeStarted() {
-		return _migration.getTimeStarted();
+	public Date getStart() {
+		return _migration.getStart();
 	}
 
 	/**
@@ -214,16 +190,6 @@ public class MigrationWrapper implements Migration, ModelWrapper<Migration> {
 		return _migration.getPrimaryKey();
 	}
 
-	/**
-	* Returns the records synced of this migration.
-	*
-	* @return the records synced of this migration
-	*/
-	@Override
-	public long getRecordsSynced() {
-		return _migration.getRecordsSynced();
-	}
-
 	@Override
 	public void persist() {
 		_migration.persist();
@@ -232,6 +198,16 @@ public class MigrationWrapper implements Migration, ModelWrapper<Migration> {
 	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_migration.setCachedModel(cachedModel);
+	}
+
+	/**
+	* Sets the end of this migration.
+	*
+	* @param end the end of this migration
+	*/
+	@Override
+	public void setEnd(Date end) {
+		_migration.setEnd(end);
 	}
 
 	@Override
@@ -248,16 +224,6 @@ public class MigrationWrapper implements Migration, ModelWrapper<Migration> {
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
 		_migration.setExpandoBridgeAttributes(serviceContext);
-	}
-
-	/**
-	* Sets the from date of this migration.
-	*
-	* @param fromDate the from date of this migration
-	*/
-	@Override
-	public void setFromDate(Date fromDate) {
-		_migration.setFromDate(fromDate);
 	}
 
 	/**
@@ -291,33 +257,13 @@ public class MigrationWrapper implements Migration, ModelWrapper<Migration> {
 	}
 
 	/**
-	* Sets the records synced of this migration.
+	* Sets the start of this migration.
 	*
-	* @param recordsSynced the records synced of this migration
+	* @param start the start of this migration
 	*/
 	@Override
-	public void setRecordsSynced(long recordsSynced) {
-		_migration.setRecordsSynced(recordsSynced);
-	}
-
-	/**
-	* Sets the time completed of this migration.
-	*
-	* @param timeCompleted the time completed of this migration
-	*/
-	@Override
-	public void setTimeCompleted(Date timeCompleted) {
-		_migration.setTimeCompleted(timeCompleted);
-	}
-
-	/**
-	* Sets the time started of this migration.
-	*
-	* @param timeStarted the time started of this migration
-	*/
-	@Override
-	public void setTimeStarted(Date timeStarted) {
-		_migration.setTimeStarted(timeStarted);
+	public void setStart(Date start) {
+		_migration.setStart(start);
 	}
 
 	@Override

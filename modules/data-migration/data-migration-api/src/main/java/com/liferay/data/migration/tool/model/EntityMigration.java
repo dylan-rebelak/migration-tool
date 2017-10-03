@@ -21,26 +21,27 @@ import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.util.Accessor;
 
 /**
- * The extended model interface for the Migration service. Represents a row in the &quot;MIG_Migration&quot; database table, with each column mapped to a property of this class.
+ * The extended model interface for the EntityMigration service. Represents a row in the &quot;MIG_EntityMigration&quot; database table, with each column mapped to a property of this class.
  *
  * @author Dylan Rebelak
- * @see MigrationModel
- * @see com.liferay.data.migration.tool.model.impl.MigrationImpl
- * @see com.liferay.data.migration.tool.model.impl.MigrationModelImpl
+ * @see EntityMigrationModel
+ * @see com.liferay.data.migration.tool.model.impl.EntityMigrationImpl
+ * @see com.liferay.data.migration.tool.model.impl.EntityMigrationModelImpl
  * @generated
  */
-@ImplementationClassName("com.liferay.data.migration.tool.model.impl.MigrationImpl")
+@ImplementationClassName("com.liferay.data.migration.tool.model.impl.EntityMigrationImpl")
 @ProviderType
-public interface Migration extends MigrationModel, PersistedModel {
+public interface EntityMigration extends EntityMigrationModel, PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify this interface directly. Add methods to {@link com.liferay.data.migration.tool.model.impl.MigrationImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
+	 * Never modify this interface directly. Add methods to {@link com.liferay.data.migration.tool.model.impl.EntityMigrationImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
-	public static final Accessor<Migration, Long> MIGRATION_ID_ACCESSOR = new Accessor<Migration, Long>() {
+	public static final Accessor<EntityMigration, Long> ENTITY_MIGRATION_ID_ACCESSOR =
+		new Accessor<EntityMigration, Long>() {
 			@Override
-			public Long get(Migration migration) {
-				return migration.getMigrationId();
+			public Long get(EntityMigration entityMigration) {
+				return entityMigration.getEntityMigrationId();
 			}
 
 			@Override
@@ -49,8 +50,8 @@ public interface Migration extends MigrationModel, PersistedModel {
 			}
 
 			@Override
-			public Class<Migration> getTypeClass() {
-				return Migration.class;
+			public Class<EntityMigration> getTypeClass() {
+				return EntityMigration.class;
 			}
 		};
 }

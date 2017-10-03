@@ -22,21 +22,20 @@ import com.liferay.portal.kernel.exception.NoSuchModelException;
  * @author Dylan Rebelak
  */
 @ProviderType
-@SuppressWarnings("serial")
-public class NoSuchEntityManagerException extends NoSuchModelException {
+public class NoSuchEntityMigrationException extends NoSuchModelException {
 
-	public NoSuchEntityManagerException() {
+	public NoSuchEntityMigrationException() {
 	}
 
-	public NoSuchEntityManagerException(String msg) {
+	public NoSuchEntityMigrationException(String msg) {
 		super(msg);
 	}
 
-	public NoSuchEntityManagerException(String msg, Throwable cause) {
+	public NoSuchEntityMigrationException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
 
-	public NoSuchEntityManagerException(Throwable cause) {
+	public NoSuchEntityMigrationException(Throwable cause) {
 		super(cause);
 	}
 

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-	<bean class="com.liferay.data.migration.tool.service.impl.EntityManagerLocalServiceImpl" id="com.liferay.data.migration.tool.service.EntityManagerLocalService" />
-	<bean class="com.liferay.data.migration.tool.service.persistence.impl.EntityManagerPersistenceImpl" id="com.liferay.data.migration.tool.service.persistence.EntityManagerPersistence" parent="basePersistence" />
+	<bean class="com.liferay.data.migration.tool.service.impl.EntityMigrationLocalServiceImpl" id="com.liferay.data.migration.tool.service.EntityMigrationLocalService" />
+	<bean class="com.liferay.data.migration.tool.service.persistence.impl.EntityMigrationPersistenceImpl" id="com.liferay.data.migration.tool.service.persistence.EntityMigrationPersistence" parent="basePersistence" />
 	<bean class="com.liferay.data.migration.tool.service.impl.MigrationLocalServiceImpl" id="com.liferay.data.migration.tool.service.MigrationLocalService" />
 	<bean class="com.liferay.data.migration.tool.service.persistence.impl.MigrationPersistenceImpl" id="com.liferay.data.migration.tool.service.persistence.MigrationPersistence" parent="basePersistence" />
 </beans>

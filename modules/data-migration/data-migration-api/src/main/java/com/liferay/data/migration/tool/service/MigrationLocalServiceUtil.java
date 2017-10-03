@@ -41,6 +41,12 @@ public class MigrationLocalServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.data.migration.tool.service.impl.MigrationLocalServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+	public static com.liferay.data.migration.tool.model.EntityMigration fetchLastOrCreateNewEntityMigration(
+		com.liferay.data.migration.tool.model.Migration migration,
+		java.lang.String entityName) {
+		return getService()
+				   .fetchLastOrCreateNewEntityMigration(migration, entityName);
+	}
 
 	/**
 	* Adds the migration to the database. Also notifies the appropriate model listeners.
@@ -51,6 +57,11 @@ public class MigrationLocalServiceUtil {
 	public static com.liferay.data.migration.tool.model.Migration addMigration(
 		com.liferay.data.migration.tool.model.Migration migration) {
 		return getService().addMigration(migration);
+	}
+
+	public static com.liferay.data.migration.tool.model.Migration addMigration(
+		java.util.Date start) {
+		return getService().addMigration(start);
 	}
 
 	/**
@@ -91,10 +102,6 @@ public class MigrationLocalServiceUtil {
 	public static com.liferay.data.migration.tool.model.Migration fetchMigration(
 		long migrationId) {
 		return getService().fetchMigration(migrationId);
-	}
-
-	public static com.liferay.data.migration.tool.model.Migration getLastMigration() {
-		return getService().getLastMigration();
 	}
 
 	/**
@@ -233,17 +240,6 @@ public class MigrationLocalServiceUtil {
 	}
 
 	/**
-	* NOTE FOR DEVELOPERS:
-	*
-	* Never reference this class directly. Always use {@link MigrationLocalServiceUtil} to access the migration local service.
-	*/
-	public static java.util.concurrent.atomic.AtomicLong runEntityService(
-		EntityService entityService, java.util.Date startDate,
-		java.util.concurrent.atomic.AtomicLong count) {
-		return getService().migrateEntities(entityService, startDate, count);
-	}
-
-	/**
 	* Returns the number of rows matching the dynamic query.
 	*
 	* @param dynamicQuery the dynamic query
@@ -267,15 +263,23 @@ public class MigrationLocalServiceUtil {
 		return getService().dynamicQueryCount(dynamicQuery, projection);
 	}
 
-	public static long migrateEntityBatch(
-		EntityService entityService,
+	public static long getLastMigrationId() {
+		return getService().getLastMigrationId();
+	}
+
+	public static long migrateEntityBatch(EntityService entityService,
 		java.util.List<java.lang.Object> batch) {
 		return getService().migrateEntityBatch(entityService, batch);
 	}
 
-	public static void addMigration(java.util.Date fromDate,
-		java.util.Date timeStarted, long count) {
-		getService().addMigration(fromDate, timeStarted, count);
+	/**
+	* NOTE FOR DEVELOPERS:
+	*
+	* Never reference this class directly. Always use {@link MigrationLocalServiceUtil} to access the migration local service.
+	*/
+	public static void migrateEntities(EntityService entityService,
+		com.liferay.data.migration.tool.model.Migration migration) {
+		getService().migrateEntities(entityService, migration);
 	}
 
 	public static MigrationLocalService getService() {

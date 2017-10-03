@@ -1,15 +1,18 @@
 <?xml version="1.0"?>
 
 <model-hints>
-	<model name="com.liferay.data.migration.tool.model.EntityManager">
+	<model name="com.liferay.data.migration.tool.model.EntityMigration">
+		<field name="entityMigrationId" type="long" />
+		<field name="migrationId" type="long" />
 		<field name="entityName" type="String" />
-		<field name="lastSyncDate" type="Date" />
+		<field name="start" type="Date" />
+		<field name="end" type="Date" />
+		<field name="count" type="long" />
+		<field name="lastCompletion" type="Date" />
 	</model>
 	<model name="com.liferay.data.migration.tool.model.Migration">
 		<field name="migrationId" type="long" />
-		<field name="fromDate" type="Date" />
-		<field name="timeStarted" type="Date" />
-		<field name="timeCompleted" type="Date" />
-		<field name="recordsSynced" type="long" />
+		<field name="start" type="Date" />
+		<field name="end" type="Date" />
 	</model>
 </model-hints>

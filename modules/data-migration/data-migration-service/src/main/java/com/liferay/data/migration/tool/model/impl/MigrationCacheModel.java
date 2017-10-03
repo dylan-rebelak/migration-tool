@@ -65,18 +65,14 @@ public class MigrationCacheModel implements CacheModel<Migration>,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(11);
+		StringBundler sb = new StringBundler(7);
 
 		sb.append("{migrationId=");
 		sb.append(migrationId);
-		sb.append(", fromDate=");
-		sb.append(fromDate);
-		sb.append(", timeStarted=");
-		sb.append(timeStarted);
-		sb.append(", timeCompleted=");
-		sb.append(timeCompleted);
-		sb.append(", recordsSynced=");
-		sb.append(recordsSynced);
+		sb.append(", start=");
+		sb.append(start);
+		sb.append(", end=");
+		sb.append(end);
 		sb.append("}");
 
 		return sb.toString();
@@ -88,28 +84,19 @@ public class MigrationCacheModel implements CacheModel<Migration>,
 
 		migrationImpl.setMigrationId(migrationId);
 
-		if (fromDate == Long.MIN_VALUE) {
-			migrationImpl.setFromDate(null);
+		if (start == Long.MIN_VALUE) {
+			migrationImpl.setStart(null);
 		}
 		else {
-			migrationImpl.setFromDate(new Date(fromDate));
+			migrationImpl.setStart(new Date(start));
 		}
 
-		if (timeStarted == Long.MIN_VALUE) {
-			migrationImpl.setTimeStarted(null);
+		if (end == Long.MIN_VALUE) {
+			migrationImpl.setEnd(null);
 		}
 		else {
-			migrationImpl.setTimeStarted(new Date(timeStarted));
+			migrationImpl.setEnd(new Date(end));
 		}
-
-		if (timeCompleted == Long.MIN_VALUE) {
-			migrationImpl.setTimeCompleted(null);
-		}
-		else {
-			migrationImpl.setTimeCompleted(new Date(timeCompleted));
-		}
-
-		migrationImpl.setRecordsSynced(recordsSynced);
 
 		migrationImpl.resetOriginalValues();
 
@@ -119,27 +106,19 @@ public class MigrationCacheModel implements CacheModel<Migration>,
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		migrationId = objectInput.readLong();
-		fromDate = objectInput.readLong();
-		timeStarted = objectInput.readLong();
-		timeCompleted = objectInput.readLong();
-
-		recordsSynced = objectInput.readLong();
+		start = objectInput.readLong();
+		end = objectInput.readLong();
 	}
 
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
 		objectOutput.writeLong(migrationId);
-		objectOutput.writeLong(fromDate);
-		objectOutput.writeLong(timeStarted);
-		objectOutput.writeLong(timeCompleted);
-
-		objectOutput.writeLong(recordsSynced);
+		objectOutput.writeLong(start);
+		objectOutput.writeLong(end);
 	}
 
 	public long migrationId;
-	public long fromDate;
-	public long timeStarted;
-	public long timeCompleted;
-	public long recordsSynced;
+	public long start;
+	public long end;
 }

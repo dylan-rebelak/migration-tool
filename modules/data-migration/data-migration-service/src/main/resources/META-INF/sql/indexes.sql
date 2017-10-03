@@ -1,0 +1,1 @@
+create index IX_497EC99E on MIG_EntityMigration (migrationId, entityName[$COLUMN_LENGTH:75$]);

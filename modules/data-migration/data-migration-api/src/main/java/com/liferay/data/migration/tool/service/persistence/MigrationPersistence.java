@@ -159,4 +159,7 @@ public interface MigrationPersistence extends BasePersistence<Migration> {
 	* @return the number of migrations
 	*/
 	public int countAll();
+
+	@Override
+	public java.util.Set<java.lang.String> getBadColumnNames();
 }

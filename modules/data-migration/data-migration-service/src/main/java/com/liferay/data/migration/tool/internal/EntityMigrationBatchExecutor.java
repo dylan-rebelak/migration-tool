@@ -14,7 +14,7 @@ import org.apache.commons.lang.time.StopWatch;
 /**
  * @author Dylan Rebelak
  */
-public class MigrationEntityBatchExecutor implements Runnable {
+public class EntityMigrationBatchExecutor implements Runnable {
 
 	@Override
 	public void run() {
@@ -25,7 +25,7 @@ public class MigrationEntityBatchExecutor implements Runnable {
 		stopWatch.start();
 
 		long count = _migrationLocalService.migrateEntityBatch(
-			_entityService, _entityBatch);
+			_entityService, _batch);
 
 		if (_log.isDebugEnabled()) {
 			StringBundler msg = new StringBundler(8);
@@ -33,7 +33,7 @@ public class MigrationEntityBatchExecutor implements Runnable {
 			msg.append(">>> Successful sync ");
 			msg.append(count);
 			msg.append(" of ");
-			msg.append(_entityBatch.size());
+			msg.append(_batch.size());
 			msg.append(" total entities of type ");
 			msg.append(entityName);
 			msg.append(" in: ");
@@ -45,11 +45,11 @@ public class MigrationEntityBatchExecutor implements Runnable {
 		_count.getAndAdd(count);
 	}
 
-	protected MigrationEntityBatchExecutor(
+	protected EntityMigrationBatchExecutor(
 		EntityService entityService, List<Object> batch, AtomicLong count) {
 
 		_entityService = entityService;
-		_entityBatch = batch;
+		_batch = batch;
 		_count = count;
 	}
 
@@ -60,10 +60,10 @@ public class MigrationEntityBatchExecutor implements Runnable {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		MigrationEntityBatchExecutor.class);
+		EntityMigrationBatchExecutor.class);
 
+	private List<Object> _batch;
 	private AtomicLong _count;
-	private List<Object> _entityBatch;
 	private EntityService _entityService;
 	private MigrationLocalService _migrationLocalService;
 

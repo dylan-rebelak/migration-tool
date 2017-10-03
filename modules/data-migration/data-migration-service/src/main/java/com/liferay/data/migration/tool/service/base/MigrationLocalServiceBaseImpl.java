@@ -18,7 +18,7 @@ import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.data.migration.tool.model.Migration;
 import com.liferay.data.migration.tool.service.MigrationLocalService;
-import com.liferay.data.migration.tool.service.persistence.EntityManagerPersistence;
+import com.liferay.data.migration.tool.service.persistence.EntityMigrationPersistence;
 import com.liferay.data.migration.tool.service.persistence.MigrationPersistence;
 
 import com.liferay.portal.kernel.bean.BeanReference;
@@ -313,41 +313,41 @@ public abstract class MigrationLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
-	 * Returns the entity manager local service.
+	 * Returns the entity migration local service.
 	 *
-	 * @return the entity manager local service
+	 * @return the entity migration local service
 	 */
-	public com.liferay.data.migration.tool.service.EntityManagerLocalService getEntityManagerLocalService() {
-		return entityManagerLocalService;
+	public com.liferay.data.migration.tool.service.EntityMigrationLocalService getEntityMigrationLocalService() {
+		return entityMigrationLocalService;
 	}
 
 	/**
-	 * Sets the entity manager local service.
+	 * Sets the entity migration local service.
 	 *
-	 * @param entityManagerLocalService the entity manager local service
+	 * @param entityMigrationLocalService the entity migration local service
 	 */
-	public void setEntityManagerLocalService(
-		com.liferay.data.migration.tool.service.EntityManagerLocalService entityManagerLocalService) {
-		this.entityManagerLocalService = entityManagerLocalService;
+	public void setEntityMigrationLocalService(
+		com.liferay.data.migration.tool.service.EntityMigrationLocalService entityMigrationLocalService) {
+		this.entityMigrationLocalService = entityMigrationLocalService;
 	}
 
 	/**
-	 * Returns the entity manager persistence.
+	 * Returns the entity migration persistence.
 	 *
-	 * @return the entity manager persistence
+	 * @return the entity migration persistence
 	 */
-	public EntityManagerPersistence getEntityManagerPersistence() {
-		return entityManagerPersistence;
+	public EntityMigrationPersistence getEntityMigrationPersistence() {
+		return entityMigrationPersistence;
 	}
 
 	/**
-	 * Sets the entity manager persistence.
+	 * Sets the entity migration persistence.
 	 *
-	 * @param entityManagerPersistence the entity manager persistence
+	 * @param entityMigrationPersistence the entity migration persistence
 	 */
-	public void setEntityManagerPersistence(
-		EntityManagerPersistence entityManagerPersistence) {
-		this.entityManagerPersistence = entityManagerPersistence;
+	public void setEntityMigrationPersistence(
+		EntityMigrationPersistence entityMigrationPersistence) {
+		this.entityMigrationPersistence = entityMigrationPersistence;
 	}
 
 	/**
@@ -553,10 +553,10 @@ public abstract class MigrationLocalServiceBaseImpl extends BaseLocalServiceImpl
 		}
 	}
 
-	@BeanReference(type = com.liferay.data.migration.tool.service.EntityManagerLocalService.class)
-	protected com.liferay.data.migration.tool.service.EntityManagerLocalService entityManagerLocalService;
-	@BeanReference(type = EntityManagerPersistence.class)
-	protected EntityManagerPersistence entityManagerPersistence;
+	@BeanReference(type = com.liferay.data.migration.tool.service.EntityMigrationLocalService.class)
+	protected com.liferay.data.migration.tool.service.EntityMigrationLocalService entityMigrationLocalService;
+	@BeanReference(type = EntityMigrationPersistence.class)
+	protected EntityMigrationPersistence entityMigrationPersistence;
 	@BeanReference(type = MigrationLocalService.class)
 	protected MigrationLocalService migrationLocalService;
 	@BeanReference(type = MigrationPersistence.class)
