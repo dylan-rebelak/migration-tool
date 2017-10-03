@@ -1,6 +1,6 @@
 package com.liferay.data.migration.tool.internal;
 
-import com.liferay.data.migration.tool.service.MigrationEntityService;
+import com.liferay.data.migration.tool.service.EntityService;
 import com.liferay.data.migration.tool.service.MigrationLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -46,8 +46,7 @@ public class MigrationEntityBatchExecutor implements Runnable {
 	}
 
 	protected MigrationEntityBatchExecutor(
-		MigrationEntityService entityService, List<Object> batch,
-		AtomicLong count) {
+		EntityService entityService, List<Object> batch, AtomicLong count) {
 
 		_entityService = entityService;
 		_entityBatch = batch;
@@ -65,7 +64,7 @@ public class MigrationEntityBatchExecutor implements Runnable {
 
 	private AtomicLong _count;
 	private List<Object> _entityBatch;
-	private MigrationEntityService _entityService;
+	private EntityService _entityService;
 	private MigrationLocalService _migrationLocalService;
 
 }

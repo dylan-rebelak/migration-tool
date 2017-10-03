@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author Dylan Rebelak
  */
-public interface MigrationEntityService {
+public interface EntityService {
 
 	public static final String LOCAL_SERVICE_IMPL_SUFFIX = "LocalServiceImpl";
 
@@ -36,8 +36,7 @@ public interface MigrationEntityService {
 		Date sinceDate, Date now, int start, int end);
 
 	public default String getEntityName() {
-		Class<? extends MigrationEntityService> localServiceClass =
-			this.getClass();
+		Class<? extends EntityService> localServiceClass = this.getClass();
 
 		return StringUtil.removeSubstring(
 			localServiceClass.getSimpleName(), LOCAL_SERVICE_IMPL_SUFFIX);

@@ -1,7 +1,7 @@
 package com.liferay.data.migration.tool.internal;
 
 import com.liferay.data.migration.tool.model.Migration;
-import com.liferay.data.migration.tool.service.MigrationEntityService;
+import com.liferay.data.migration.tool.service.EntityService;
 import com.liferay.data.migration.tool.service.MigrationExecutor;
 import com.liferay.data.migration.tool.service.MigrationLocalService;
 import com.liferay.portal.kernel.log.Log;
@@ -36,27 +36,37 @@ public class MigrationExecutorImpl implements MigrationExecutor {
 			_log.info(">>> Starting Data Migration...");
 		}
 
-		Date timeStarted = new Date();
+		Date startTime = new Date();
 
-		long entityCount = _runEntityServices(timeStarted);
+		long entityCount = migrateEntities(startTime);
 
 		if (_log.isInfoEnabled()) {
 			_log.info(">>> Data Migration finished.");
 		}
 
-		_migrationLocalService.addMigration(fromDate, timeStarted, entityCount);
+		_migrationLocalService.addMigration(fromDate, startTime, entityCount);
 	}
 
-	protected void bind(MigrationEntityService entityService) {
-		if (_migrationEntityServices == null) {
-			_migrationEntityServices = new ArrayList<>();
+	protected void bind(EntityService entityService) {
+		if (_entityServices == null) {
+			_entityServices = new ArrayList<>();
 		}
 
-		_migrationEntityServices.add(entityService);
+		_entityServices.add(entityService);
 	}
 
-	protected void unbind(MigrationEntityService entityService) {
-		_migrationEntityServices.remove(entityService);
+	protected long migrateEntities(final Date startDate) {
+		final AtomicLong count = new AtomicLong();
+
+		_entityServices.parallelStream().forEach(
+			entityService -> _migrationLocalService.migrateEntities(
+				entityService, startDate, count));
+
+		return count.longValue();
+	}
+
+	protected void unbind(EntityService entityService) {
+		_entityServices.remove(entityService);
 	}
 
 	private Date _getLastMigrationStartTime() {
@@ -71,32 +81,21 @@ public class MigrationExecutorImpl implements MigrationExecutor {
 		return startTime;
 	}
 
-	private long _runEntityServices(final Date startDate) {
-		final AtomicLong count = new AtomicLong();
-
-		_migrationEntityServices.parallelStream().forEach(
-			migrationEntityService ->
-				_migrationLocalService.runEntityService(
-					migrationEntityService, startDate, count));
-
-		return count.longValue();
-	}
-
 	private static final Date _EPOCH = new Date(0);
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		MigrationExecutorImpl.class);
 
-	@Reference
-	private GroupLocalService _groupLocalService;
-
 	@Reference(
 		bind = "bind", cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC,
-		service = MigrationEntityService.class, unbind = "unbind"
+		policy = ReferencePolicy.DYNAMIC, service = EntityService.class,
+		unbind = "unbind"
 
 	)
-	private volatile List<MigrationEntityService> _migrationEntityServices;
+	private volatile List<EntityService> _entityServices;
+
+	@Reference
+	private GroupLocalService _groupLocalService;
 
 	@Reference
 	private MigrationLocalService _migrationLocalService;

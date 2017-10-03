@@ -219,7 +219,7 @@ public interface MigrationLocalService extends BaseLocalService,
 	* Never reference this class directly. Always use {@link MigrationLocalServiceUtil} to access the migration local service.
 	*/
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public AtomicLong runEntityService(MigrationEntityService entityService,
+	public AtomicLong migrateEntities(EntityService entityService,
 		Date startDate, AtomicLong count);
 
 	/**
@@ -241,7 +241,7 @@ public interface MigrationLocalService extends BaseLocalService,
 		Projection projection);
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public long migrateEntityBatch(MigrationEntityService entityService,
+	public long migrateEntityBatch(EntityService entityService,
 		List<java.lang.Object> batch);
 
 	public void addMigration(Date fromDate, Date timeStarted, long count);

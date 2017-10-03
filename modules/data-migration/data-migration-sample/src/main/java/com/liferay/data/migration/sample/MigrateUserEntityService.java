@@ -1,6 +1,6 @@
 package com.liferay.data.migration.sample;
 
-import com.liferay.data.migration.tool.service.MigrationEntityService;
+import com.liferay.data.migration.tool.service.EntityService;
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
@@ -22,8 +22,8 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Dylan Rebelak
  */
-@Component(immediate = true, service = MigrationEntityService.class)
-public class MigrateUserEntityService implements MigrationEntityService {
+@Component(immediate = true, service = EntityService.class)
+public class MigrateUserEntityService implements EntityService {
 
 	@Override
 	public DynamicQuery dynamicQuery() {

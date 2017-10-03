@@ -248,10 +248,10 @@ public class MigrationLocalServiceWrapper implements MigrationLocalService,
 	* Never reference this class directly. Always use {@link MigrationLocalServiceUtil} to access the migration local service.
 	*/
 	@Override
-	public java.util.concurrent.atomic.AtomicLong runEntityService(
-		MigrationEntityService entityService, java.util.Date startDate,
+	public java.util.concurrent.atomic.AtomicLong migrateEntities(
+		EntityService entityService, java.util.Date startDate,
 		java.util.concurrent.atomic.AtomicLong count) {
-		return _migrationLocalService.runEntityService(entityService,
+		return _migrationLocalService.migrateEntities(entityService,
 			startDate, count);
 	}
 
@@ -282,7 +282,7 @@ public class MigrationLocalServiceWrapper implements MigrationLocalService,
 	}
 
 	@Override
-	public long migrateEntityBatch(MigrationEntityService entityService,
+	public long migrateEntityBatch(EntityService entityService,
 		java.util.List<java.lang.Object> batch) {
 		return _migrationLocalService.migrateEntityBatch(entityService, batch);
 	}

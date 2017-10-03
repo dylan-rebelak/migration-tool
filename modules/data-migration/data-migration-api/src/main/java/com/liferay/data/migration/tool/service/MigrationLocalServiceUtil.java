@@ -238,9 +238,9 @@ public class MigrationLocalServiceUtil {
 	* Never reference this class directly. Always use {@link MigrationLocalServiceUtil} to access the migration local service.
 	*/
 	public static java.util.concurrent.atomic.AtomicLong runEntityService(
-		MigrationEntityService entityService, java.util.Date startDate,
+		EntityService entityService, java.util.Date startDate,
 		java.util.concurrent.atomic.AtomicLong count) {
-		return getService().runEntityService(entityService, startDate, count);
+		return getService().migrateEntities(entityService, startDate, count);
 	}
 
 	/**
@@ -268,7 +268,7 @@ public class MigrationLocalServiceUtil {
 	}
 
 	public static long migrateEntityBatch(
-		MigrationEntityService entityService,
+		EntityService entityService,
 		java.util.List<java.lang.Object> batch) {
 		return getService().migrateEntityBatch(entityService, batch);
 	}

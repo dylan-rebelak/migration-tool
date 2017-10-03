@@ -3,10 +3,10 @@ package com.liferay.data.migration.tool.service;
 /**
  * @author Dylan Rebelak
  */
-public interface MigrationEntity {
+public interface Entity {
 
 	public default String getEntityName() {
-		Class<? extends MigrationEntity> entityClass = this.getClass();
+		Class<? extends Entity> entityClass = this.getClass();
 
 		return removePrefix(entityClass.getSimpleName());
 	}

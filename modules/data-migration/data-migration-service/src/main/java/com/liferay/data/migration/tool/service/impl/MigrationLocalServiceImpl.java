@@ -19,7 +19,7 @@ import aQute.bnd.annotation.ProviderType;
 import com.liferay.data.migration.tool.internal.MigrationTaskImpl;
 import com.liferay.data.migration.tool.model.EntityManager;
 import com.liferay.data.migration.tool.model.Migration;
-import com.liferay.data.migration.tool.service.MigrationEntityService;
+import com.liferay.data.migration.tool.service.EntityService;
 import com.liferay.data.migration.tool.service.MigrationTask;
 import com.liferay.data.migration.tool.service.base.MigrationLocalServiceBaseImpl;
 import com.liferay.portal.kernel.log.Log;
@@ -77,9 +77,47 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 		return lastMigration;
 	}
 
+	/**
+	 * NOTE FOR DEVELOPERS:
+	 *
+	 * Never reference this class directly. Always use {@link com.liferay.data.migration.tool.service.MigrationLocalServiceUtil} to access the migration local service.
+	 */
+
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public AtomicLong migrateEntities(
+		EntityService entityService, Date startDate, AtomicLong count) {
+
+		String entityName = entityService.getEntityName();
+
+		try {
+			EntityManager entityManager =
+				entityManagerLocalService.fetchEntityManager(entityName);
+
+			if (entityManager == null) {
+				entityManager = entityManagerLocalService.createEntityManager(
+					entityName);
+
+				entityManager.setLastSyncDate(new Date(0));
+			}
+
+			Date fromDate = entityManager.getLastSyncDate();
+
+			count.addAndGet(
+				doMigrateEntities(entityService, fromDate, startDate));
+
+			entityManager.setLastSyncDate(startDate);
+			entityManagerLocalService.updateEntityManager(entityManager);
+		}
+		catch (Exception e) {
+			_log.error(">>> Failed to sync " + entityName, e);
+		}
+
+		return count;
+	}
+
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public long migrateEntityBatch(
-		MigrationEntityService entityService, List<Object> batch) {
+		EntityService entityService, List<Object> batch) {
 
 		long count = 0;
 
@@ -104,48 +142,7 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 		return count;
 	}
 
-	/**
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this class directly. Always use {@link com.liferay.data.migration.tool.service.MigrationLocalServiceUtil} to access the migration local service.
-	 */
-
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public AtomicLong runEntityService(
-		MigrationEntityService entityService, Date startDate,
-		AtomicLong count) {
-
-		String entityName = entityService.getEntityName();
-
-		try {
-			EntityManager entityManager =
-				entityManagerLocalService.fetchEntityManager(entityName);
-
-			if (entityManager == null) {
-				entityManager = entityManagerLocalService.createEntityManager(
-					entityName);
-
-				entityManager.setLastSyncDate(new Date(0));
-			}
-
-			Date fromDate = entityManager.getLastSyncDate();
-
-			count.addAndGet(
-				doRunEntityService(entityService, fromDate, startDate));
-
-			entityManager.setLastSyncDate(startDate);
-			entityManagerLocalService.updateEntityManager(entityManager);
-		}
-		catch (Exception e) {
-			_log.error(">>> Failed to sync " + entityName, e);
-		}
-
-		return count;
-	}
-
-	protected MigrationTask createEntitySync(
-		MigrationEntityService entityService) {
-
+	protected MigrationTask createEntitySync(EntityService entityService) {
 		MigrationTaskImpl task = new MigrationTaskImpl(entityService);
 
 		task.setMigrationLocalService(migrationLocalService);
@@ -153,9 +150,8 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 		return task;
 	}
 
-	protected long doRunEntityService(
-		MigrationEntityService entityService, final Date fromDate,
-		final Date now) {
+	protected long doMigrateEntities(
+		EntityService entityService, final Date fromDate, final Date now) {
 
 		String entityName = entityService.getEntityName();
 

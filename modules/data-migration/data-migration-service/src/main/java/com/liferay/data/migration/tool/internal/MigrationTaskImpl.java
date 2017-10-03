@@ -4,7 +4,7 @@ import static com.liferay.data.migration.tool.internal.MigrationConstants.MAX_BA
 import static com.liferay.data.migration.tool.internal.MigrationConstants.SYNC_REC_COUNT;
 import static com.liferay.data.migration.tool.internal.MigrationConstants.THREAD_POOL_SIZE;
 
-import com.liferay.data.migration.tool.service.MigrationEntityService;
+import com.liferay.data.migration.tool.service.EntityService;
 import com.liferay.data.migration.tool.service.MigrationLocalService;
 import com.liferay.data.migration.tool.service.MigrationTask;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -22,14 +22,14 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class MigrationTaskImpl implements MigrationTask {
 
-	public MigrationTaskImpl(MigrationEntityService entityService) {
+	public MigrationTaskImpl(EntityService entityService) {
 		this(
 			entityService, SYNC_REC_COUNT, THREAD_POOL_SIZE,
 			MAX_BATCH_QUEUE_SIZE);
 	}
 
 	public MigrationTaskImpl(
-		MigrationEntityService entityService, int batchSize, int threadPoolSize,
+		EntityService entityService, int batchSize, int threadPoolSize,
 		int maxQueue) {
 
 		_entityService = entityService;
@@ -102,7 +102,7 @@ public class MigrationTaskImpl implements MigrationTask {
 
 	private int _batchSize;
 	private AtomicLong _count;
-	private MigrationEntityService _entityService;
+	private EntityService _entityService;
 	private MigrationLocalService _migrationLocalService;
 	private ThreadPoolExecutor _threadPoolExecutor;
 
