@@ -2,39 +2,56 @@
 <!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.0.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_0_0.dtd">
 <service-builder package-path="com.liferay.data.migration.tool">
 	<author>Dylan Rebelak</author>
-	<namespace>SYNC</namespace>
+	<namespace>MIG</namespace>
 
-	<entity local-service="true" name="EntityManager" remote-service="false">
-		<column name="entityName" primary="true" type="String" />
+	<entity local-service="true" name="EntityMigration" remote-service="false">
+		<column name="entityMigrationId" primary="true" type="long" />
 
-		<!-- started: Time of last completed sync for this entity -->
+		<!-- migrationId: foreign key to link entity migrations to one migration execution -->
 
-		<column name="lastSyncDate" type="Date" />
+		<column name="migrationId" type="long" />
+
+		<!-- entityName: Entity migrated -->
+
+		<column name="entityName" type="String" />
+
+		<!-- start: Time entity migration started -->
+
+		<column name="start" type="Date" />
+
+		<!-- end: Time entity migration completed -->
+
+		<column name="end" type="Date" />
+
+		<!-- count: Count of records migrated -->
+
+		<column name="count" type="long" />
+
+		<!-- lastCompletion: Last time migration completed successfully -->
+
+		<column name="lastCompletion" type="Date" />
+
+		<finder name="MigrationIdAndEntityName" return-type="EntityMigration">
+			<finder-column name="migrationId" />
+			<finder-column name="entityName" />
+		</finder>
 	</entity>
 
 	<entity local-service="true" name="Migration" remote-service="false">
 		<column name="migrationId" primary="true" type="long" />
 
-		<!-- fromDate: This is the date used to select all records changed from the given date. -->
+		<!-- start: Time migration execution started -->
 
-		<column name="fromDate" type="Date" />
+		<column name="start" type="Date" />
 
-		<!-- started: Time this run started -->
+		<!-- end: Time migration execution completed -->
 
-		<column name="timeStarted" type="Date" />
-
-		<!-- completed: Time this run completed -->
-
-		<column name="timeCompleted" type="Date" />
-
-		<!-- recordsSynced: This is the count of records synced during this run -->
-
-		<column name="recordsSynced" type="long" />
+		<column name="end" type="Date" />
 
 		<!-- Order by started date descending so the first record is our starting point for the next run -->
 
 		<order by="desc">
-			<order-column name="timeStarted" />
+			<order-column name="start" />
 		</order>
 	</entity>
 </service-builder>
