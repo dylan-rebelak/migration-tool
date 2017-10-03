@@ -16,11 +16,12 @@ package com.liferay.data.migration.tool.service.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.data.migration.tool.internal.MigrationTaskImpl;
-import com.liferay.data.migration.tool.model.EntityManager;
+import com.liferay.data.migration.tool.internal.EntityMigrationTaskImpl;
+import com.liferay.data.migration.tool.internal.MigrationConstants;
+import com.liferay.data.migration.tool.model.EntityMigration;
 import com.liferay.data.migration.tool.model.Migration;
+import com.liferay.data.migration.tool.service.EntityMigrationTask;
 import com.liferay.data.migration.tool.service.EntityService;
-import com.liferay.data.migration.tool.service.MigrationTask;
 import com.liferay.data.migration.tool.service.base.MigrationLocalServiceBaseImpl;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -51,30 +52,44 @@ import org.apache.commons.lang.time.StopWatch;
 @ProviderType
 public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 
-	public void addMigration(Date fromDate, Date startTime, long count) {
+	public Migration addMigration(Date start) {
 		long migrationId = counterLocalService.increment(
 			Migration.class.getName());
 
 		Migration migration = migrationPersistence.create(migrationId);
 
-		migration.setFromDate(fromDate);
-		migration.setTimeStarted(startTime);
-		migration.setTimeCompleted(new Date());
-		migration.setRecordsSynced(count);
+		migration.setStart(start);
 
-		addMigration(migration);
+		return addMigration(migration);
 	}
 
-	public Migration getLastMigration() {
-		Migration lastMigration = null;
+	public EntityMigration fetchLastOrCreateNewEntityMigration(
+		Migration migration, String entityName) {
 
+		long lastMigrationId = getLastMigrationId();
+
+		EntityMigration entityMigration =
+			entityMigrationLocalService.fetchLastEntityMigration(
+				lastMigrationId, entityName);
+
+		if (entityMigration == null) {
+			entityMigration = entityMigrationLocalService.addEntityMigration(
+				migration.getMigrationId(), entityName);
+		}
+
+		return entityMigration;
+	}
+
+	public long getLastMigrationId() {
 		List<Migration> migrations = getMigrations(0, 1);
 
 		if (!migrations.isEmpty()) {
-			lastMigration = migrations.get(0);
+			Migration lastMigration = migrations.get(0);
+
+			return lastMigration.getMigrationId();
 		}
 
-		return lastMigration;
+		return MigrationConstants.DEFAULT_MIGRATION_ID;
 	}
 
 	/**
@@ -84,35 +99,39 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 	 */
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public AtomicLong migrateEntities(
-		EntityService entityService, Date startDate, AtomicLong count) {
-
-		String entityName = entityService.getEntityName();
+	public void migrateEntities(
+		EntityService entityService, Migration migration) {
 
 		try {
-			EntityManager entityManager =
-				entityManagerLocalService.fetchEntityManager(entityName);
+			EntityMigration entityMigration =
+				fetchLastOrCreateNewEntityMigration(
+					migration, entityService.getEntityName());
 
-			if (entityManager == null) {
-				entityManager = entityManagerLocalService.createEntityManager(
-					entityName);
+			// Migration window
 
-				entityManager.setLastSyncDate(new Date(0));
-			}
+			Date from = entityMigration.getLastCompletion();
 
-			Date fromDate = entityManager.getLastSyncDate();
+			Date to = migration.getStart();
 
-			count.addAndGet(
-				doMigrateEntities(entityService, fromDate, startDate));
+			AtomicLong count = new AtomicLong();
 
-			entityManager.setLastSyncDate(startDate);
-			entityManagerLocalService.updateEntityManager(entityManager);
+			entityMigration.setStart(new Date());
+
+			// Migrate entities
+
+			count.addAndGet(doMigrateEntities(entityService, from, to));
+
+			// Save stats to database
+
+			entityMigration.setEnd(new Date());
+			entityMigration.setLastCompletion(migration.getStart());
+
+			entityMigrationLocalService.updateEntityMigration(entityMigration);
 		}
 		catch (Exception e) {
-			_log.error(">>> Failed to sync " + entityName, e);
+			_log.error(
+				">>> Failed to migrate " + entityService.getEntityName(), e);
 		}
-
-		return count;
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -142,8 +161,11 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 		return count;
 	}
 
-	protected MigrationTask createEntitySync(EntityService entityService) {
-		MigrationTaskImpl task = new MigrationTaskImpl(entityService);
+	protected EntityMigrationTask createEntityMigrationTask(
+		EntityService entityService) {
+
+		EntityMigrationTaskImpl task = new EntityMigrationTaskImpl(
+			entityService);
 
 		task.setMigrationLocalService(migrationLocalService);
 
@@ -151,12 +173,12 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 	}
 
 	protected long doMigrateEntities(
-		EntityService entityService, final Date fromDate, final Date now) {
+		EntityService entityService, final Date from, final Date to) {
 
 		String entityName = entityService.getEntityName();
 
 		if (_log.isDebugEnabled()) {
-			long total = entityService.countEntities(fromDate, now);
+			long total = entityService.countEntities(from, to);
 
 			StringBundler msg = new StringBundler(4);
 
@@ -168,16 +190,16 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 			_log.debug(msg.toString());
 		}
 
-		StopWatch entitySyncStopWatch = new StopWatch();
+		StopWatch entityMigrationStopWatch = new StopWatch();
 
-		entitySyncStopWatch.start();
+		entityMigrationStopWatch.start();
 
-		MigrationTask task = createEntitySync(entityService);
+		EntityMigrationTask task = createEntityMigrationTask(entityService);
 
-		task.run(fromDate, now);
+		task.run(from, to);
 		task.blockUntilDone();
 
-		long count = task.getImportCount();
+		long count = task.getMigrationCount();
 
 		if (_log.isInfoEnabled()) {
 			StringBundler msg = new StringBundler(6);
@@ -187,7 +209,7 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 			msg.append(" entities of type ");
 			msg.append(entityName);
 			msg.append(" in: ");
-			msg.append(entitySyncStopWatch.getTime());
+			msg.append(entityMigrationStopWatch.getTime());
 
 			_log.info(msg.toString());
 		}
