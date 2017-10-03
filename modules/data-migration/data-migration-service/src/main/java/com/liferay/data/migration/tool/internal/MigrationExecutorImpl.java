@@ -12,7 +12,6 @@ import com.liferay.portal.kernel.util.Portal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -27,24 +26,22 @@ public class MigrationExecutorImpl implements MigrationExecutor {
 
 	@Override
 	public void execute() {
-		execute(_getLastMigrationStartTime());
-	}
-
-	@Override
-	public void execute(Date fromDate) {
 		if (_log.isInfoEnabled()) {
 			_log.info(">>> Starting Data Migration...");
 		}
 
-		Date startTime = new Date();
+		Date start = new Date();
 
-		long entityCount = migrateEntities(startTime);
+		Migration migration = _migrationLocalService.addMigration(start);
+
+		migrateAllEntities(migration);
 
 		if (_log.isInfoEnabled()) {
 			_log.info(">>> Data Migration finished.");
 		}
 
-		_migrationLocalService.addMigration(fromDate, startTime, entityCount);
+		migration.setEnd(new Date());
+		_migrationLocalService.updateMigration(migration);
 	}
 
 	protected void bind(EntityService entityService) {
@@ -55,33 +52,15 @@ public class MigrationExecutorImpl implements MigrationExecutor {
 		_entityServices.add(entityService);
 	}
 
-	protected long migrateEntities(final Date startDate) {
-		final AtomicLong count = new AtomicLong();
-
+	protected void migrateAllEntities(final Migration migration) {
 		_entityServices.parallelStream().forEach(
 			entityService -> _migrationLocalService.migrateEntities(
-				entityService, startDate, count));
-
-		return count.longValue();
+				entityService, migration));
 	}
 
 	protected void unbind(EntityService entityService) {
 		_entityServices.remove(entityService);
 	}
-
-	private Date _getLastMigrationStartTime() {
-		Date startTime = _EPOCH;
-
-		Migration lastMigration = _migrationLocalService.getLastMigration();
-
-		if (lastMigration != null) {
-			startTime = lastMigration.getTimeStarted();
-		}
-
-		return startTime;
-	}
-
-	private static final Date _EPOCH = new Date(0);
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		MigrationExecutorImpl.class);

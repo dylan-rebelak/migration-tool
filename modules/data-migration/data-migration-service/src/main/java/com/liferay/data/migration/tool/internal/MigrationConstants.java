@@ -9,6 +9,8 @@ import com.liferay.portal.kernel.util.StringPool;
  */
 public class MigrationConstants {
 
+	public static final long DEFAULT_MIGRATION_ID = 0L;
+
 	public static final int MAX_BATCH_QUEUE_SIZE = GetterUtil.getInteger(
 		PropsUtil.get("data.migration.max.batch.queue.size"), 10);
 
