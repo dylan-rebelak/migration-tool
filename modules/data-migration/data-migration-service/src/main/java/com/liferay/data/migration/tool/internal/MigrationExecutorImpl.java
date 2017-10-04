@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.util.Portal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ForkJoinPool;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -53,7 +54,14 @@ public class MigrationExecutorImpl implements MigrationExecutor {
 	}
 
 	protected void migrateAllEntities(final Migration migration) {
-		_entityServices.parallelStream().forEach(
+		ForkJoinPool forkJoinPool = new ForkJoinPool(
+			MigrationConstants.ENTITY_SERVICE_THREAD_POOL_SIZE);
+
+		forkJoinPool.submit(oneThreadPerEntityService(migration));
+	}
+
+	protected Runnable oneThreadPerEntityService(final Migration migration) {
+		return () -> _entityServices.parallelStream().forEach(
 			entityService -> _migrationLocalService.migrateEntities(
 				entityService, migration));
 	}

@@ -1,8 +1,8 @@
 package com.liferay.data.migration.tool.internal;
 
+import static com.liferay.data.migration.tool.internal.MigrationConstants.BATCH_EXECUTOR_THREAD_POOL_SIZE;
 import static com.liferay.data.migration.tool.internal.MigrationConstants.MAX_BATCH_QUEUE_SIZE;
 import static com.liferay.data.migration.tool.internal.MigrationConstants.SYNC_REC_COUNT;
-import static com.liferay.data.migration.tool.internal.MigrationConstants.THREAD_POOL_SIZE;
 
 import com.liferay.data.migration.tool.service.EntityMigrationTask;
 import com.liferay.data.migration.tool.service.EntityService;
@@ -24,7 +24,7 @@ public class EntityMigrationTaskImpl implements EntityMigrationTask {
 
 	public EntityMigrationTaskImpl(EntityService entityService) {
 		this(
-			entityService, SYNC_REC_COUNT, THREAD_POOL_SIZE,
+			entityService, SYNC_REC_COUNT, BATCH_EXECUTOR_THREAD_POOL_SIZE,
 			MAX_BATCH_QUEUE_SIZE);
 	}
 
@@ -77,7 +77,7 @@ public class EntityMigrationTaskImpl implements EntityMigrationTask {
 				break;
 			}
 
-			_threadPoolExecutor.execute(_createSyncJob(batch));
+			_threadPoolExecutor.execute(_createBatchExecutorJob(batch));
 		}
 
 		_threadPoolExecutor.shutdown();
@@ -89,7 +89,9 @@ public class EntityMigrationTaskImpl implements EntityMigrationTask {
 		_migrationLocalService = migrationLocalService;
 	}
 
-	private EntityMigrationBatchExecutor _createSyncJob(List<Object> batch) {
+	private EntityMigrationBatchExecutor _createBatchExecutorJob(
+		List<Object> batch) {
+
 		EntityMigrationBatchExecutor batchExecutor =
 			new EntityMigrationBatchExecutor(_entityService, batch, _count);
 
