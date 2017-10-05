@@ -81,10 +81,10 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 	}
 
 	public long getLastMigrationId() {
-		List<Migration> migrations = getMigrations(0, 1);
+		List<Migration> migrations = getMigrations(0, 2);
 
 		if (!migrations.isEmpty()) {
-			Migration lastMigration = migrations.get(0);
+			Migration lastMigration = migrations.get(1);
 
 			return lastMigration.getMigrationId();
 		}
@@ -125,6 +125,7 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 
 			entityMigration.setEnd(new Date());
 			entityMigration.setLastCompletion(migration.getStart());
+			entityMigration.setCount(count.longValue());
 
 			entityMigrationLocalService.updateEntityMigration(entityMigration);
 		}
@@ -176,19 +177,6 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 		EntityService entityService, final Date from, final Date to) {
 
 		String entityName = entityService.getEntityName();
-
-		if (_log.isDebugEnabled()) {
-			long total = entityService.countEntities(from, to);
-
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(">>> Total number of ");
-			msg.append(entityName);
-			msg.append(" to sync: ");
-			msg.append(total);
-
-			_log.debug(msg.toString());
-		}
 
 		StopWatch entityMigrationStopWatch = new StopWatch();
 

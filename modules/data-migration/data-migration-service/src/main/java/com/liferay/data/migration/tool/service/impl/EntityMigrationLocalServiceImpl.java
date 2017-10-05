@@ -50,6 +50,7 @@ public class EntityMigrationLocalServiceImpl
 
 		entityMigration.setEntityName(entityName);
 		entityMigration.setLastCompletion(_EPOCH);
+		entityMigration.setMigrationId(migrationId);
 
 		return addEntityMigration(entityMigration);
 	}
