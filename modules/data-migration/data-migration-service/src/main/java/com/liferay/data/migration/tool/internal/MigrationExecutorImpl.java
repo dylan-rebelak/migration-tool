@@ -71,7 +71,7 @@ public class MigrationExecutorImpl implements MigrationExecutor {
 		unbind = "unbind"
 
 	)
-	private volatile List<EntityService> _entityServices;
+	private List<EntityService> _entityServices;
 
 	@Reference
 	private GroupLocalService _groupLocalService;
