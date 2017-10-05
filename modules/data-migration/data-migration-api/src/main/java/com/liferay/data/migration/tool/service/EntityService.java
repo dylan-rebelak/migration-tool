@@ -15,23 +15,6 @@ public interface EntityService {
 
 	public static final String LOCAL_SERVICE_IMPL_SUFFIX = "LocalServiceImpl";
 
-	public default long countEntities(Date startDate, Date now) {
-		DynamicQuery query = this.dynamicQuery();
-
-		if (startDate.getTime() != 0) {
-			Criterion criterion = RestrictionsFactoryUtil.between(
-				"modifiedDate", startDate, now);
-
-			query.add(criterion);
-		}
-
-		return this.dynamicQueryCount(query);
-	}
-
-	public abstract DynamicQuery dynamicQuery();
-
-	public abstract long dynamicQueryCount(DynamicQuery query);
-
 	public List<Object> getEntitiesModifiedSinceDate(
 		Date from, Date to, int batchStart, int batchEnd);
 

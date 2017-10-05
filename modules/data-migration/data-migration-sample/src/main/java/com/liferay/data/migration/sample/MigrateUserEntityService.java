@@ -26,18 +26,6 @@ import org.osgi.service.component.annotations.Reference;
 public class MigrateUserEntityService implements EntityService {
 
 	@Override
-	public DynamicQuery dynamicQuery() {
-
-		return _userLocalService.dynamicQuery();
-	}
-
-	@Override
-	public long dynamicQueryCount(DynamicQuery query) {
-
-		return _userLocalService.dynamicQueryCount(query);
-	}
-
-	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public List<Object> getEntitiesModifiedSinceDate(
 		Date sinceDate, Date now, int start, int end)
@@ -47,7 +35,7 @@ public class MigrateUserEntityService implements EntityService {
 			return _asGenericEntities(_userLocalService.getUsers(start, end));
 		}
 
-		DynamicQuery dynamicQuery = dynamicQuery();
+		DynamicQuery dynamicQuery = _userLocalService.dynamicQuery();
 
 		Criterion criterion = RestrictionsFactoryUtil.between(
 			"modifiedDate", sinceDate, now);
