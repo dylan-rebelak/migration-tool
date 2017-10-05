@@ -1,8 +1,5 @@
 package com.liferay.data.migration.tool.service;
 
-import com.liferay.portal.kernel.dao.orm.Criterion;
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.Date;
