@@ -1,4 +1,4 @@
-package com.lliferay.data.migration.tool.internal.scheduler;
+package com.liferay.data.migration.tool.internal.scheduler;
 
 import com.liferay.portal.kernel.scheduler.SchedulerEntryImpl;
 import com.liferay.portal.kernel.scheduler.StorageType;
