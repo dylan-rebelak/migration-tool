@@ -1,0 +1,3 @@
+Bundle-Name: Data Migration Tool - Web
+Bundle-SymbolicName: com.liferay.data.migration.tool.web
+Bundle-Version: 1.0.0
