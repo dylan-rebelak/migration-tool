@@ -18,7 +18,7 @@ public class EntityMigrationBatchExecutor implements Runnable {
 
 	@Override
 	public void run() {
-		String entityName = _entityService.getEntityName();
+		String entityName = _entityService.getClass().getName();
 
 		StopWatch stopWatch = new StopWatch();
 
