@@ -1,9 +1,6 @@
 package com.liferay.data.migration.tool.internal;
 
-import static com.liferay.data.migration.tool.internal.MigrationConstants.BATCH_EXECUTOR_THREAD_POOL_SIZE;
-import static com.liferay.data.migration.tool.internal.MigrationConstants.MAX_BATCH_QUEUE_SIZE;
-import static com.liferay.data.migration.tool.internal.MigrationConstants.SYNC_REC_COUNT;
-
+import com.liferay.data.migration.tool.configuration.MigrationToolConfiguration;
 import com.liferay.data.migration.tool.service.EntityMigrationTask;
 import com.liferay.data.migration.tool.service.EntityService;
 import com.liferay.data.migration.tool.service.MigrationLocalService;
@@ -22,25 +19,20 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class EntityMigrationTaskImpl implements EntityMigrationTask {
 
-	public EntityMigrationTaskImpl(EntityService entityService) {
-		this(
-			entityService, SYNC_REC_COUNT, BATCH_EXECUTOR_THREAD_POOL_SIZE,
-			MAX_BATCH_QUEUE_SIZE);
-	}
-
 	public EntityMigrationTaskImpl(
-		EntityService entityService, int batchSize, int threadPoolSize,
-		int maxQueue) {
+		EntityService entityService, MigrationToolConfiguration configuration) {
 
 		_entityService = entityService;
-		_batchSize = batchSize;
+		_batchSize = configuration.batchSize();
 		_count = new AtomicLong();
 
-		BlockingQueue<Runnable> jobQueue = new LinkedBlockingQueue<>(maxQueue);
+		BlockingQueue<Runnable> jobQueue = new LinkedBlockingQueue<>(
+			configuration.maxBatchQueueSize());
 
 		_threadPoolExecutor = new ThreadPoolExecutor(
-			threadPoolSize, threadPoolSize, _DEFAULT_KEEP_ALIVE_TIME,
-			TimeUnit.MILLISECONDS, jobQueue,
+			configuration.migrationTaskThreadPoolSize(),
+			configuration.migrationTaskThreadPoolSize(),
+			_DEFAULT_KEEP_ALIVE_TIME, TimeUnit.MILLISECONDS, jobQueue,
 			new ThreadPoolExecutor.CallerRunsPolicy());
 	}
 

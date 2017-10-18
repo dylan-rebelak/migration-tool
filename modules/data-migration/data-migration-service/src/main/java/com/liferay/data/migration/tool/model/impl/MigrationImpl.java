@@ -16,6 +16,8 @@ package com.liferay.data.migration.tool.model.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.data.migration.tool.configuration.MigrationToolConfiguration;
+
 /**
  * The extended model implementation for the Migration service. Represents a row in the &quot;SYNC_Migration&quot; database table, with each column mapped to a property of this class.
  *
@@ -35,5 +37,15 @@ public class MigrationImpl extends MigrationBaseImpl {
 	 */
 	public MigrationImpl() {
 	}
+
+	public MigrationToolConfiguration getConfiguration() {
+		return _configuration;
+	}
+
+	public void setConfiguration(MigrationToolConfiguration configuration) {
+		_configuration = configuration;
+	}
+
+	private MigrationToolConfiguration _configuration;
 
 }

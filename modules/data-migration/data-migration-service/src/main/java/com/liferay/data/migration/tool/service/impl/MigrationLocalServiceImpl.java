@@ -16,6 +16,7 @@ package com.liferay.data.migration.tool.service.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.data.migration.tool.configuration.MigrationToolConfiguration;
 import com.liferay.data.migration.tool.internal.EntityMigrationTaskImpl;
 import com.liferay.data.migration.tool.internal.MigrationConstants;
 import com.liferay.data.migration.tool.model.EntityMigration;
@@ -119,7 +120,9 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 
 			// Migrate entities
 
-			count.addAndGet(doMigrateEntities(entityService, from, to));
+			count.addAndGet(
+				doMigrateEntities(
+					entityService, from, to, migration.getConfiguration()));
 
 			// Save stats to database
 
@@ -163,10 +166,10 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 	}
 
 	protected EntityMigrationTask createEntityMigrationTask(
-		EntityService entityService) {
+		EntityService entityService, MigrationToolConfiguration configuration) {
 
 		EntityMigrationTaskImpl task = new EntityMigrationTaskImpl(
-			entityService);
+			entityService, configuration);
 
 		task.setMigrationLocalService(migrationLocalService);
 
@@ -174,7 +177,8 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 	}
 
 	protected long doMigrateEntities(
-		EntityService entityService, final Date from, final Date to) {
+		EntityService entityService, final Date from, final Date to,
+		MigrationToolConfiguration configuration) {
 
 		String entityName = entityService.getEntityName();
 
@@ -182,7 +186,8 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 
 		entityMigrationStopWatch.start();
 
-		EntityMigrationTask task = createEntityMigrationTask(entityService);
+		EntityMigrationTask task = createEntityMigrationTask(
+			entityService, configuration);
 
 		task.run(from, to);
 		task.blockUntilDone();

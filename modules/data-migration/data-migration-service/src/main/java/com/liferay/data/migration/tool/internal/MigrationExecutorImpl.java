@@ -1,9 +1,11 @@
 package com.liferay.data.migration.tool.internal;
 
+import com.liferay.data.migration.tool.configuration.MigrationToolConfiguration;
 import com.liferay.data.migration.tool.model.Migration;
 import com.liferay.data.migration.tool.service.EntityService;
 import com.liferay.data.migration.tool.service.MigrationExecutor;
 import com.liferay.data.migration.tool.service.MigrationLocalService;
+import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.GroupLocalService;
@@ -12,9 +14,12 @@ import com.liferay.portal.kernel.util.Portal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ForkJoinPool;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
@@ -22,7 +27,10 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 /**
  * @author Dylan Rebelak
  */
-@Component(immediate = true, service = MigrationExecutor.class)
+@Component(
+	configurationPid = "com.liferay.data.migration.tool.service.configuration.MigrationToolConfiguration",
+	immediate = true, service = MigrationExecutor.class
+)
 public class MigrationExecutorImpl implements MigrationExecutor {
 
 	@Override
@@ -35,6 +43,8 @@ public class MigrationExecutorImpl implements MigrationExecutor {
 
 		Migration migration = _migrationLocalService.addMigration(start);
 
+		migration.setConfiguration(_configuration);
+
 		migrateAllEntities(migration);
 
 		if (_log.isInfoEnabled()) {
@@ -43,6 +53,13 @@ public class MigrationExecutorImpl implements MigrationExecutor {
 
 		migration.setEnd(new Date());
 		_migrationLocalService.updateMigration(migration);
+	}
+
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		_configuration = ConfigurableUtil.createConfigurable(
+			MigrationToolConfiguration.class, properties);
 	}
 
 	protected void bind(EntityService entityService) {
@@ -55,7 +72,7 @@ public class MigrationExecutorImpl implements MigrationExecutor {
 
 	protected void migrateAllEntities(final Migration migration) {
 		ForkJoinPool forkJoinPool = new ForkJoinPool(
-			MigrationConstants.ENTITY_SERVICE_THREAD_POOL_SIZE);
+			_configuration.entityServicethreadPoolSize());
 
 		forkJoinPool.submit(oneThreadPerEntityService(migration));
 	}
@@ -72,6 +89,8 @@ public class MigrationExecutorImpl implements MigrationExecutor {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		MigrationExecutorImpl.class);
+
+	private MigrationToolConfiguration _configuration;
 
 	@Reference(
 		bind = "bind", cardinality = ReferenceCardinality.MULTIPLE,
