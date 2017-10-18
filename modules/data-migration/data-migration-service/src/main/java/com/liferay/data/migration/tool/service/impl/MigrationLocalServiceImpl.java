@@ -106,7 +106,7 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 		try {
 			EntityMigration entityMigration =
 				fetchLastOrCreateNewEntityMigration(
-					migration, entityService.getEntityName());
+					migration, entityService.getClass().getName());
 
 			// Migration window
 
@@ -134,7 +134,8 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 		}
 		catch (Exception e) {
 			_log.error(
-				">>> Failed to migrate " + entityService.getEntityName(), e);
+				">>> Failed to migrate " + entityService.getClass().getName(),
+				e);
 		}
 	}
 
@@ -180,7 +181,7 @@ public class MigrationLocalServiceImpl extends MigrationLocalServiceBaseImpl {
 		EntityService entityService, final Date from, final Date to,
 		MigrationToolConfiguration configuration) {
 
-		String entityName = entityService.getEntityName();
+		String entityName = entityService.getClass().getName();
 
 		StopWatch entityMigrationStopWatch = new StopWatch();
 
