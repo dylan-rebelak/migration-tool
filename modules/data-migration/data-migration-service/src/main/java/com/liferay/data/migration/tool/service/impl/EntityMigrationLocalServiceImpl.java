@@ -20,6 +20,7 @@ import com.liferay.data.migration.tool.model.EntityMigration;
 import com.liferay.data.migration.tool.service.base.EntityMigrationLocalServiceBaseImpl;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * The implementation of the entity migration local service.
@@ -55,11 +56,22 @@ public class EntityMigrationLocalServiceImpl
 		return addEntityMigration(entityMigration);
 	}
 
+	public int countByMigrationId(long migrationId) {
+		return entityMigrationPersistence.countByMigrationId(migrationId);
+	}
+
 	public EntityMigration fetchLastEntityMigration(
 		long parentId, String entityName) {
 
 		return entityMigrationPersistence.fetchByMigrationIdAndEntityName(
 			parentId, entityName);
+	}
+
+	public List<EntityMigration> findByMigrationId(
+		long migrationId, int start, int end) {
+
+		return entityMigrationPersistence.findByMigrationId(
+			migrationId, start, end);
 	}
 
 	private static final Date _EPOCH = new Date(0);

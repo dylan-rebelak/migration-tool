@@ -31,6 +31,9 @@
 
 		<column name="lastCompletion" type="Date" />
 
+		<finder name="MigrationId" return-type="Collection">
+			<finder-column name="migrationId" />
+		</finder>
 		<finder name="MigrationIdAndEntityName" return-type="EntityMigration">
 			<finder-column name="migrationId" />
 			<finder-column name="entityName" />
