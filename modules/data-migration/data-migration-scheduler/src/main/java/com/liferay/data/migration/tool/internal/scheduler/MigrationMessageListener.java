@@ -5,16 +5,17 @@ import com.liferay.portal.kernel.lock.Lock;
 import com.liferay.portal.kernel.lock.LockManager;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.BaseSchedulerEntryMessageListener;
+import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
+import com.liferay.portal.kernel.scheduler.SchedulerEntryImpl;
 import com.liferay.portal.kernel.scheduler.SchedulerException;
+import com.liferay.portal.kernel.scheduler.StorageType;
 import com.liferay.portal.kernel.scheduler.StorageTypeAware;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
-import com.liferay.portal.kernel.scheduler.TriggerFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 
 import java.util.Date;
@@ -30,11 +31,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Dylan Rebelak
  */
 @Component(immediate = true, service = MigrationMessageListener.class)
-/* TODO: extend BaseMessageListerner instead
- * Refer to https://web.liferay.com/web/user.26526/blog/-/blogs/liferay-7-ce-liferay-dxp-scheduled-tasks for details
- */
-public class MigrationMessageListener
-	extends BaseSchedulerEntryMessageListener {
+public class MigrationMessageListener extends BaseMessageListener {
 
 	@Activate
 	@Modified
@@ -44,39 +41,41 @@ public class MigrationMessageListener
 		String cronExpression = GetterUtil.getString(
 			properties.get("cron.expression"), _DEFAULT_CRON_EXPRESSION);
 
-		Trigger jobTrigger = TriggerFactoryUtil.createTrigger(
-			getEventListenerClass(), getEventListenerClass(), new Date(),
-			cronExpression);
+		String listenerClass = MigrationMessageListener.class.getName();
 
-		schedulerEntryImpl = new StorageAwareSchedulerEntryImpl(
-			schedulerEntryImpl);
+		Trigger jobTrigger = _triggerFactory.createTrigger(
+			listenerClass, listenerClass, new Date(), null, cronExpression);
 
-		schedulerEntryImpl.setTrigger(jobTrigger);
+		_schedulerEntryImpl = new SchedulerEntryImpl(listenerClass, jobTrigger);
+
+		_schedulerEntryImpl = new StorageAwareSchedulerEntryImpl(
+			_schedulerEntryImpl);
 
 		if (_initialized) {
 			deactivate();
 		}
 
 		_schedulerEngineHelper.register(
-			this, schedulerEntryImpl, DestinationNames.SCHEDULER_DISPATCH);
+			this, _schedulerEntryImpl, DestinationNames.SCHEDULER_DISPATCH);
 
 		_initialized = true;
 	}
 
 	@Deactivate
 	protected void deactivate() {
-		try {
-			_schedulerEngineHelper.unschedule(
-				schedulerEntryImpl,
-				((StorageTypeAware)schedulerEntryImpl).getStorageType());
-		}
-		catch (SchedulerException se) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(">>> Unable to unschedule trigger", se);
+		if (_initialized) {
+			try {
+				_schedulerEngineHelper.unschedule(
+					_schedulerEntryImpl, getStorageType());
 			}
-		}
+			catch (SchedulerException se) {
+				if (_log.isWarnEnabled()) {
+					_log.warn("Unable to unschedule trigger", se);
+				}
+			}
 
-		_schedulerEngineHelper.unregister(this);
+			_schedulerEngineHelper.unregister(this);
+		}
 
 		_initialized = false;
 	}
@@ -115,13 +114,17 @@ public class MigrationMessageListener
 		}
 	}
 
+	protected StorageType getStorageType() {
+		if (_schedulerEntryImpl instanceof StorageTypeAware) {
+			return ((StorageTypeAware)_schedulerEntryImpl).getStorageType();
+		}
+
+		return StorageType.MEMORY_CLUSTERED;
+	}
+
 	@Reference(target = ModuleServiceLifecycle.PORTAL_INITIALIZED, unbind = "-")
 	protected void setModuleServiceLifecycle(
 		ModuleServiceLifecycle moduleServiceLifecycle) {
-	}
-
-	@Reference(unbind = "-")
-	protected void setTriggerFactory(TriggerFactory triggerFactory) {
 	}
 
 	private static final String _DEFAULT_CRON_EXPRESSION = "0 0 0 * * ?";
@@ -139,5 +142,10 @@ public class MigrationMessageListener
 
 	@Reference
 	private SchedulerEngineHelper _schedulerEngineHelper;
+
+	private SchedulerEntryImpl _schedulerEntryImpl = null;
+
+	@Reference
+	private TriggerFactory _triggerFactory;
 
 }

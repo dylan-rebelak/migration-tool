@@ -35,21 +35,6 @@ public class StorageAwareSchedulerEntryImpl
 		return _delegate.getTrigger();
 	}
 
-	@Override
-	public void setDescription(String description) {
-		_delegate.setDescription(description);
-	}
-
-	@Override
-	public void setEventListenerClass(String eventListenerClass) {
-		_delegate.setEventListenerClass(eventListenerClass);
-	}
-
-	@Override
-	public void setTrigger(Trigger trigger) {
-		_delegate.setTrigger(trigger);
-	}
-
 	private SchedulerEntryImpl _delegate;
 
 }
