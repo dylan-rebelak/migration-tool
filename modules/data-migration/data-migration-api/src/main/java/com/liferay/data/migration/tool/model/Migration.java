@@ -53,4 +53,9 @@ public interface Migration extends MigrationModel, PersistedModel {
 				return Migration.class;
 			}
 		};
+
+	public com.liferay.data.migration.tool.configuration.MigrationToolConfiguration getConfiguration();
+
+	public void setConfiguration(
+		com.liferay.data.migration.tool.configuration.MigrationToolConfiguration configuration);
 }
