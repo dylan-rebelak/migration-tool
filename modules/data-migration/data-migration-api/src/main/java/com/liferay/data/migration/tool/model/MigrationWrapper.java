@@ -111,6 +111,11 @@ public class MigrationWrapper implements Migration, ModelWrapper<Migration> {
 	}
 
 	@Override
+	public com.liferay.data.migration.tool.configuration.MigrationToolConfiguration getConfiguration() {
+		return _migration.getConfiguration();
+	}
+
+	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return _migration.getExpandoBridge();
 	}
@@ -198,6 +203,12 @@ public class MigrationWrapper implements Migration, ModelWrapper<Migration> {
 	@Override
 	public void setCachedModel(boolean cachedModel) {
 		_migration.setCachedModel(cachedModel);
+	}
+
+	@Override
+	public void setConfiguration(
+		com.liferay.data.migration.tool.configuration.MigrationToolConfiguration configuration) {
+		_migration.setConfiguration(configuration);
 	}
 
 	/**
