@@ -150,6 +150,8 @@ public interface EntityMigrationLocalService extends BaseLocalService,
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
 
+	public int countByMigrationId(long migrationId);
+
 	/**
 	* Returns the number of entity migrations.
 	*
@@ -203,6 +205,9 @@ public interface EntityMigrationLocalService extends BaseLocalService,
 	*/
 	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
 		int end, OrderByComparator<T> orderByComparator);
+
+	public List<EntityMigration> findByMigrationId(long migrationId, int start,
+		int end);
 
 	/**
 	* Returns a range of all the entity migrations.

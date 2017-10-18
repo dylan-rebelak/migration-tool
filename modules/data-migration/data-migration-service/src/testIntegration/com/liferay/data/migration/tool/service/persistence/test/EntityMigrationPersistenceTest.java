@@ -171,6 +171,13 @@ public class EntityMigrationPersistenceTest {
 	}
 
 	@Test
+	public void testCountByMigrationId() throws Exception {
+		_persistence.countByMigrationId(RandomTestUtil.nextLong());
+
+		_persistence.countByMigrationId(0L);
+	}
+
+	@Test
 	public void testFindByPrimaryKeyExisting() throws Exception {
 		EntityMigration newEntityMigration = addEntityMigration();
 

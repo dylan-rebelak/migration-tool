@@ -162,6 +162,11 @@ public class EntityMigrationLocalServiceWrapper
 		return _entityMigrationLocalService.getPersistedModel(primaryKeyObj);
 	}
 
+	@Override
+	public int countByMigrationId(long migrationId) {
+		return _entityMigrationLocalService.countByMigrationId(migrationId);
+	}
+
 	/**
 	* Returns the number of entity migrations.
 	*
@@ -234,6 +239,13 @@ public class EntityMigrationLocalServiceWrapper
 		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return _entityMigrationLocalService.dynamicQuery(dynamicQuery, start,
 			end, orderByComparator);
+	}
+
+	@Override
+	public java.util.List<com.liferay.data.migration.tool.model.EntityMigration> findByMigrationId(
+		long migrationId, int start, int end) {
+		return _entityMigrationLocalService.findByMigrationId(migrationId,
+			start, end);
 	}
 
 	/**

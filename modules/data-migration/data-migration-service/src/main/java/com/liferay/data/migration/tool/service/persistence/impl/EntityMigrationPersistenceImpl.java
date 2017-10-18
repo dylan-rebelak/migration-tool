@@ -364,6 +364,516 @@ public class EntityMigrationPersistenceImpl extends BasePersistenceImpl<EntityMi
 		"entityMigration.entityName = ?";
 	private static final String _FINDER_COLUMN_MIGRATIONIDANDENTITYNAME_ENTITYNAME_3 =
 		"(entityMigration.entityName IS NULL OR entityMigration.entityName = '')";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_MIGRATIONID =
+		new FinderPath(EntityMigrationModelImpl.ENTITY_CACHE_ENABLED,
+			EntityMigrationModelImpl.FINDER_CACHE_ENABLED,
+			EntityMigrationImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByMigrationId",
+			new String[] {
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MIGRATIONID =
+		new FinderPath(EntityMigrationModelImpl.ENTITY_CACHE_ENABLED,
+			EntityMigrationModelImpl.FINDER_CACHE_ENABLED,
+			EntityMigrationImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByMigrationId",
+			new String[] { Long.class.getName() },
+			EntityMigrationModelImpl.MIGRATIONID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_MIGRATIONID = new FinderPath(EntityMigrationModelImpl.ENTITY_CACHE_ENABLED,
+			EntityMigrationModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByMigrationId",
+			new String[] { Long.class.getName() });
+
+	/**
+	 * Returns all the entity migrations where migrationId = &#63;.
+	 *
+	 * @param migrationId the migration ID
+	 * @return the matching entity migrations
+	 */
+	@Override
+	public List<EntityMigration> findByMigrationId(long migrationId) {
+		return findByMigrationId(migrationId, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the entity migrations where migrationId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link EntityMigrationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param migrationId the migration ID
+	 * @param start the lower bound of the range of entity migrations
+	 * @param end the upper bound of the range of entity migrations (not inclusive)
+	 * @return the range of matching entity migrations
+	 */
+	@Override
+	public List<EntityMigration> findByMigrationId(long migrationId, int start,
+		int end) {
+		return findByMigrationId(migrationId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the entity migrations where migrationId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link EntityMigrationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param migrationId the migration ID
+	 * @param start the lower bound of the range of entity migrations
+	 * @param end the upper bound of the range of entity migrations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching entity migrations
+	 */
+	@Override
+	public List<EntityMigration> findByMigrationId(long migrationId, int start,
+		int end, OrderByComparator<EntityMigration> orderByComparator) {
+		return findByMigrationId(migrationId, start, end, orderByComparator,
+			true);
+	}
+
+	/**
+	 * Returns an ordered range of all the entity migrations where migrationId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link EntityMigrationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param migrationId the migration ID
+	 * @param start the lower bound of the range of entity migrations
+	 * @param end the upper bound of the range of entity migrations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @return the ordered range of matching entity migrations
+	 */
+	@Override
+	public List<EntityMigration> findByMigrationId(long migrationId, int start,
+		int end, OrderByComparator<EntityMigration> orderByComparator,
+		boolean retrieveFromCache) {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MIGRATIONID;
+			finderArgs = new Object[] { migrationId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_MIGRATIONID;
+			finderArgs = new Object[] { migrationId, start, end, orderByComparator };
+		}
+
+		List<EntityMigration> list = null;
+
+		if (retrieveFromCache) {
+			list = (List<EntityMigration>)finderCache.getResult(finderPath,
+					finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (EntityMigration entityMigration : list) {
+					if ((migrationId != entityMigration.getMigrationId())) {
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_ENTITYMIGRATION_WHERE);
+
+			query.append(_FINDER_COLUMN_MIGRATIONID_MIGRATIONID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(EntityMigrationModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(migrationId);
+
+				if (!pagination) {
+					list = (List<EntityMigration>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<EntityMigration>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				finderCache.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				finderCache.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first entity migration in the ordered set where migrationId = &#63;.
+	 *
+	 * @param migrationId the migration ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching entity migration
+	 * @throws NoSuchEntityMigrationException if a matching entity migration could not be found
+	 */
+	@Override
+	public EntityMigration findByMigrationId_First(long migrationId,
+		OrderByComparator<EntityMigration> orderByComparator)
+		throws NoSuchEntityMigrationException {
+		EntityMigration entityMigration = fetchByMigrationId_First(migrationId,
+				orderByComparator);
+
+		if (entityMigration != null) {
+			return entityMigration;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("migrationId=");
+		msg.append(migrationId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntityMigrationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first entity migration in the ordered set where migrationId = &#63;.
+	 *
+	 * @param migrationId the migration ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching entity migration, or <code>null</code> if a matching entity migration could not be found
+	 */
+	@Override
+	public EntityMigration fetchByMigrationId_First(long migrationId,
+		OrderByComparator<EntityMigration> orderByComparator) {
+		List<EntityMigration> list = findByMigrationId(migrationId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last entity migration in the ordered set where migrationId = &#63;.
+	 *
+	 * @param migrationId the migration ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching entity migration
+	 * @throws NoSuchEntityMigrationException if a matching entity migration could not be found
+	 */
+	@Override
+	public EntityMigration findByMigrationId_Last(long migrationId,
+		OrderByComparator<EntityMigration> orderByComparator)
+		throws NoSuchEntityMigrationException {
+		EntityMigration entityMigration = fetchByMigrationId_Last(migrationId,
+				orderByComparator);
+
+		if (entityMigration != null) {
+			return entityMigration;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("migrationId=");
+		msg.append(migrationId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntityMigrationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last entity migration in the ordered set where migrationId = &#63;.
+	 *
+	 * @param migrationId the migration ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching entity migration, or <code>null</code> if a matching entity migration could not be found
+	 */
+	@Override
+	public EntityMigration fetchByMigrationId_Last(long migrationId,
+		OrderByComparator<EntityMigration> orderByComparator) {
+		int count = countByMigrationId(migrationId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<EntityMigration> list = findByMigrationId(migrationId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the entity migrations before and after the current entity migration in the ordered set where migrationId = &#63;.
+	 *
+	 * @param entityMigrationId the primary key of the current entity migration
+	 * @param migrationId the migration ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next entity migration
+	 * @throws NoSuchEntityMigrationException if a entity migration with the primary key could not be found
+	 */
+	@Override
+	public EntityMigration[] findByMigrationId_PrevAndNext(
+		long entityMigrationId, long migrationId,
+		OrderByComparator<EntityMigration> orderByComparator)
+		throws NoSuchEntityMigrationException {
+		EntityMigration entityMigration = findByPrimaryKey(entityMigrationId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			EntityMigration[] array = new EntityMigrationImpl[3];
+
+			array[0] = getByMigrationId_PrevAndNext(session, entityMigration,
+					migrationId, orderByComparator, true);
+
+			array[1] = entityMigration;
+
+			array[2] = getByMigrationId_PrevAndNext(session, entityMigration,
+					migrationId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected EntityMigration getByMigrationId_PrevAndNext(Session session,
+		EntityMigration entityMigration, long migrationId,
+		OrderByComparator<EntityMigration> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(4 +
+					(orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_ENTITYMIGRATION_WHERE);
+
+		query.append(_FINDER_COLUMN_MIGRATIONID_MIGRATIONID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(EntityMigrationModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(migrationId);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(entityMigration);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<EntityMigration> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the entity migrations where migrationId = &#63; from the database.
+	 *
+	 * @param migrationId the migration ID
+	 */
+	@Override
+	public void removeByMigrationId(long migrationId) {
+		for (EntityMigration entityMigration : findByMigrationId(migrationId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(entityMigration);
+		}
+	}
+
+	/**
+	 * Returns the number of entity migrations where migrationId = &#63;.
+	 *
+	 * @param migrationId the migration ID
+	 * @return the number of matching entity migrations
+	 */
+	@Override
+	public int countByMigrationId(long migrationId) {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_MIGRATIONID;
+
+		Object[] finderArgs = new Object[] { migrationId };
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_ENTITYMIGRATION_WHERE);
+
+			query.append(_FINDER_COLUMN_MIGRATIONID_MIGRATIONID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(migrationId);
+
+				count = (Long)q.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				finderCache.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_MIGRATIONID_MIGRATIONID_2 = "entityMigration.migrationId = ?";
 
 	public EntityMigrationPersistenceImpl() {
 		setModelClass(EntityMigration.class);
@@ -632,6 +1142,25 @@ public class EntityMigrationPersistenceImpl extends BasePersistenceImpl<EntityMi
 
 		if (isNew || !EntityMigrationModelImpl.COLUMN_BITMASK_ENABLED) {
 			finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((entityMigrationModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MIGRATIONID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						entityMigrationModelImpl.getOriginalMigrationId()
+					};
+
+				finderCache.removeResult(FINDER_PATH_COUNT_BY_MIGRATIONID, args);
+				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MIGRATIONID,
+					args);
+
+				args = new Object[] { entityMigrationModelImpl.getMigrationId() };
+
+				finderCache.removeResult(FINDER_PATH_COUNT_BY_MIGRATIONID, args);
+				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MIGRATIONID,
+					args);
+			}
 		}
 
 		entityCache.putResult(EntityMigrationModelImpl.ENTITY_CACHE_ENABLED,
