@@ -2,6 +2,7 @@ Bundle-Name: Data Migration Tool - API
 Bundle-SymbolicName: com.liferay.data.migration.tool.api
 Bundle-Version: 1.0.0
 Export-Package:\
+	com.liferay.data.migration.tool.configuration,\
 	com.liferay.data.migration.tool.exception,\
 	com.liferay.data.migration.tool.model,\
 	com.liferay.data.migration.tool.service,\
