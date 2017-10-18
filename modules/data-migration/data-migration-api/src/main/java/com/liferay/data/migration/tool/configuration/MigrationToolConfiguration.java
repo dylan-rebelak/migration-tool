@@ -18,7 +18,7 @@ public interface MigrationToolConfiguration {
 	public int migrationTaskThreadPoolSize();
 
 	@Meta.AD(deflt = "20", required = false)
-	public int entityServicethreadPoolSize();
+	public int entityServiceThreadPoolSize();
 
 	@Meta.AD(deflt = "10", required = false)
 	public int maxBatchQueueSize();

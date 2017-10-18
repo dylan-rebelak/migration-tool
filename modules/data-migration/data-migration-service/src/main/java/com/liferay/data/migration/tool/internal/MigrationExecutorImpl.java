@@ -72,7 +72,7 @@ public class MigrationExecutorImpl implements MigrationExecutor {
 
 	protected void migrateAllEntities(final Migration migration) {
 		ForkJoinPool forkJoinPool = new ForkJoinPool(
-			_configuration.entityServicethreadPoolSize());
+			_configuration.entityServiceThreadPoolSize());
 
 		forkJoinPool.submit(oneThreadPerEntityService(migration));
 	}
